@@ -1,0 +1,10 @@
+# Development artifacts
+vendor
+.bundle
+.yardoc
+doc
+*.swp
+coverage
+
+# OS artifacts
+.DS_Store
