@@ -1,9 +1,8 @@
-require 'cyclid/config'
 require 'securerandom'
 require 'oj'
 
-# XXX: Hax
-require_rel '../../../Cyclid/lib/cyclid/hmac.rb'
+require 'cyclid/config'
+require 'cyclid/hmac'
 
 module Cyclid
   module Client

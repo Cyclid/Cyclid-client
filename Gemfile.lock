@@ -1,3 +1,8 @@
+PATH
+  remote: ../Cyclid-core/
+  specs:
+    cyclid-core (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -24,6 +29,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  cyclid-core!
   oj
   rack
   rake
