@@ -3,4 +3,4 @@ $LOAD_PATH.push File.expand_path('../../lib', __FILE__)
 
 require 'cyclid/cli'
 
-Cyclid::Client.start(ARGV)
+Cyclid::Cli::Command.start(ARGV)

@@ -1,11 +1,18 @@
 # Cyclid top level module
 module Cyclid
-  # 'user' sub-command
-  class User < Thor
-    desc 'list', 'List all of the users'
-    def list
-      %w(dave steve john).each do |user|
-        STDOUT.puts user
+  module Cli
+    # 'user' sub-command
+    class User < Thor
+      desc 'list', 'List all of the users'
+      def list
+        client = Cyclid::Client::Tilapia.new(options[:config])
+
+        begin
+          users = client.user_list
+          users.each do |user|
+            STDOUT.puts user
+          end
+        end
       end
     end
   end
