@@ -2,6 +2,7 @@ PATH
   remote: ../Cyclid-core/
   specs:
     cyclid-core (0.1.0)
+      rack (~> 1.6.0)
 
 GEM
   remote: https://rubygems.org/
@@ -31,7 +32,6 @@ PLATFORMS
 DEPENDENCIES
   cyclid-core!
   oj
-  rack
   rake
   require_all
   rubocop
