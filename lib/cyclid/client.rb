@@ -1,5 +1,6 @@
 require 'securerandom'
 require 'oj'
+require 'logger'
 
 require 'cyclid/config'
 require 'cyclid/hmac'
@@ -10,11 +11,13 @@ module Cyclid
     # 'Cyclid' and it couldn't be 'Client'. Tilapia are a common type of
     # Cichlid...
     class Tilapia
-      def initialize(config_path)
+      attr_reader :config, :logger
+
+      def initialize(config_path, log_level=Logger::FATAL)
         @config = Config.new(config_path)
 
-        STDERR.puts "server=#{@config.server}"
-        STDERR.puts "port=#{@config.port}"
+        @logger = Logger.new(STDERR)
+        @logger.level = log_level
       end
 
       def user_list
@@ -22,7 +25,7 @@ module Cyclid
         req = sign_request(Net::HTTP::Get.new(uri), uri)
 
         http = Net::HTTP.new(uri.hostname, uri.port)
-        http.set_debug_output(STDERR)
+        http.set_debug_output(@logger) if @logger.level == Logger::DEBUG
         res = http.request(req)
 
         res_data = parse_response(res)
@@ -73,7 +76,7 @@ module Cyclid
 
         raise "Server request failed with error ##{res.code}: #{response_data['message']}"
       rescue Oj::ParseError => ex
-        # logger.debug ex
+        @logger.debug ex
         raise 'failed to decode server response body'
       end
     end
