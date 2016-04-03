@@ -7,12 +7,7 @@ module Cyclid
       # Retrieve the list of users from a server
       def user_list
         uri = server_uri('/users')
-        req = sign_request(Net::HTTP::Get.new(uri), uri)
-
-        http = Net::HTTP.new(uri.hostname, uri.port)
-        res = http.request(req)
-
-        res_data = parse_response(res)
+        res_data = signed_get(uri)
         @logger.debug res_data
 
         users = []
@@ -26,13 +21,9 @@ module Cyclid
       # Get details of a specific user
       def user_get(username)
         uri = server_uri("/users/#{username}")
-        req = sign_request(Net::HTTP::Get.new(uri), uri)
-
-        http = Net::HTTP.new(uri.hostname, uri.port)
-        res = http.request(req)
-
-        res_data = parse_response(res)
+        res_data = signed_get(uri)
         @logger.debug res_data
+
         return res_data
       end
 
@@ -51,20 +42,10 @@ module Cyclid
 
         # Sign & send the request
         uri = server_uri('/users')
-
-        unsigned = Net::HTTP::Post.new(uri)
-        unsigned.content_type = 'application/json'
-        unsigned.body = Oj.dump(user)
-
-        req = sign_request(unsigned, uri)
-
-        http = Net::HTTP.new(uri.hostname, uri.port)
-        res = http.request(req)
-
-        res_data = parse_response(res)
+        res_data = signed_json_post(uri, user)
         @logger.debug res_data
 
-        raise "Failed to create new user: #{res_data.message}" unless res.code == '200'
+        return res_data
       end
 
       # Modify a user
@@ -86,32 +67,18 @@ module Cyclid
 
         # Sign & send the request
         uri = server_uri("/users/#{username}")
-
-        unsigned = Net::HTTP::Put.new(uri)
-        unsigned.content_type = 'application/json'
-        unsigned.body = Oj.dump(user)
-
-        req = sign_request(unsigned, uri)
-
-        http = Net::HTTP.new(uri.hostname, uri.port)
-        res = http.request(req)
-
-        res_data = parse_response(res)
+        res_data = signed_json_put(uri, user)
         @logger.debug res_data
 
-        raise "Failed to modify user: #{res_data.message}" unless res.code == '200'
+        return res_data
       end
 
       # Delete a user
       def user_delete(username)
         uri = server_uri("/users/#{username}")
-        req = sign_request(Net::HTTP::Delete.new(uri), uri)
-
-        http = Net::HTTP.new(uri.hostname, uri.port)
-        res = http.request(req)
-
-        res_data = parse_response(res)
+        res_data = signed_delete(uri)
         @logger.debug res_data
+
         return res_data
       end
     end

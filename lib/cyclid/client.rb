@@ -35,6 +35,54 @@ module Cyclid
                         path: path)
       end
 
+      # Sign & perform a GET request
+      def signed_get(uri)
+        req = sign_request(Net::HTTP::Get.new(uri), uri)
+
+        http = Net::HTTP.new(uri.hostname, uri.port)
+        res = http.request(req)
+
+        parse_response(res)
+      end
+
+      # Sign & perform a POST request with a JSON body
+      def signed_json_post(uri, data)
+        unsigned = Net::HTTP::Post.new(uri)
+        unsigned.content_type = 'application/json'
+        unsigned.body = Oj.dump(data)
+
+        req = sign_request(unsigned, uri)
+
+        http = Net::HTTP.new(uri.hostname, uri.port)
+        res = http.request(req)
+
+        parse_response(res)
+      end
+
+      # Sign & perform a PUT request with a JSON body
+      def signed_json_put(uri, data)
+        unsigned = Net::HTTP::Put.new(uri)
+        unsigned.content_type = 'application/json'
+        unsigned.body = Oj.dump(data)
+
+        req = sign_request(unsigned, uri)
+
+        http = Net::HTTP.new(uri.hostname, uri.port)
+        res = http.request(req)
+
+        parse_response(res)
+      end
+
+      # Sign & perform a DELETE request
+      def signed_delete(uri)
+        req = sign_request(Net::HTTP::Delete.new(uri), uri)
+
+        http = Net::HTTP.new(uri.hostname, uri.port)
+        res = http.request(req)
+
+        parse_response(res)
+      end
+
       # Sign the request with HMAC
       def sign_request(request, uri)
         signer = Cyclid::HMAC::Signer.new
