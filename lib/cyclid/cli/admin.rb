@@ -137,10 +137,31 @@ module Cyclid
       end
     end
 
+    # 'admin organization' sub-commands
+    class AdminOrganization < Thor
+      desc 'list', 'List all of the organizations'
+      def list
+        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+        begin
+          orgs = client.org_list
+          orgs.each do |org|
+            puts org
+          end
+        rescue StandardError => ex
+          abort "Failed to retrieve list of organizations: #{ex}"
+        end
+      end
+    end
+
     # 'admin' sub-command
     class Admin < Thor
       desc 'user', 'Manage users'
       subcommand 'user', AdminUser
+
+      desc 'organization', 'Manage organizations'
+      subcommand 'organization', AdminOrganization
+      map 'org' => :organization
     end
   end
 end
