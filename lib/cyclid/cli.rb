@@ -22,6 +22,9 @@ module Cyclid
       class_option :config, aliases: '-c', type: :string, default: CYCLID_CONFIG_PATH
       class_option :debug, aliases: '-d', type: :boolean, default: false
 
+      desc 'admin', 'Administrator commands'
+      subcommand 'admin', Admin
+
       desc 'user', 'Manage users'
       subcommand 'user', User
     end

@@ -5,26 +5,12 @@ module Cyclid
   module Cli
     # 'user' sub-command
     class User < Thor
-      desc 'list', 'List all of the users'
-      def list
+      desc 'show', 'Show your user details'
+      def show
         client = Cyclid::Client::Tilapia.new(options[:config], debug?)
 
         begin
-          users = client.user_list
-          users.each do |user|
-            puts user
-          end
-        rescue StandardError => ex
-          abort "Failed to retrieve list of users: #{ex}"
-        end
-      end
-
-      desc 'show USERNAME', 'Show details of the user USERNAME'
-      def show(username)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        begin
-          user = client.user_get(username)
+          user = client.user_get(client.config.username)
 
           # Pretty print the user details
           puts 'Username: '.colorize(:cyan) + user['username']
@@ -42,36 +28,11 @@ module Cyclid
         end
       end
 
-      desc 'add USERNAME EMAIL', 'Create a new user USERNAME'
+      desc 'modify', 'Modify your user'
       long_desc <<-LONGDESC
-        Create a user USERNAME with the email address EMAIL. The new user will not be a member of
-        any organization.
+        Modify your user details.
 
-        The --password option sets an encrypted password for HTTP Basic authentication and Cyclid
-        UI console logins.
-
-        The --secret option sets a shared secret which is used for signing Cyclid API requests.
-
-        One of either --password or --secret should be used if you want the user to be able to
-        authenticate with the server.
-      LONGDESC
-      option :password, aliases: '-p'
-      option :secret, aliases: '-s'
-      def add(username, email)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        begin
-          client.user_add(username, email, options[:password], options[:secret])
-        rescue StandardError => ex
-          abort "Failed to create new user: #{ex}"
-        end
-      end
-
-      desc 'modify USERNAME', 'Modify the user USERNAME'
-      long_desc <<-LONGDESC
-        Modify the user USERNAME.
-
-        The --email option sets the users email address.
+        The --email option sets your email address.
 
         The --password option sets an encrypted password for HTTP Basic authentication and Cyclid
         UI console logins.
@@ -81,11 +42,11 @@ module Cyclid
       option :email, aliases: '-e'
       option :password, aliases: '-p'
       option :secret, aliases: '-s'
-      def modify(username)
+      def modify
         client = Cyclid::Client::Tilapia.new(options[:config], debug?)
 
         begin
-          client.user_modify(username,
+          client.user_modify(client.config.username,
                              email: options[:email],
                              password: options[:password],
                              secret: options[:secret])
@@ -94,8 +55,8 @@ module Cyclid
         end
       end
 
-      desc 'passwd USERNAME', 'Change the password of the user USERNAME'
-      def passwd(username)
+      desc 'passwd', 'Change your password'
+      def passwd
         # Get the new password
         print 'Password: '
         password = STDIN.noecho(&:gets).chomp
@@ -108,34 +69,9 @@ module Cyclid
         client = Cyclid::Client::Tilapia.new(options[:config], debug?)
 
         begin
-          client.user_modify(username, password: password)
+          client.user_modify(client.config.username, password: password)
         rescue StandardError => ex
           abort "Failed to modify user: #{ex}"
-        end
-      end
-
-      desc 'delete USERNAME', 'Delete the user USERNAME'
-      long_desc <<-LONGDESC
-        Delete the user USERNAME from the server.
-
-        The --force option will delete the user without asking for confirmation.
-      LONGDESC
-      option :force, aliases: '-f', type: :boolean
-      def delete(username)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        if options[:force]
-          delete = true
-        else
-          print "Delete user #{username}: are you sure? (Y/n): ".colorize(:red)
-          delete = STDIN.getc.chr.casecmp('y') == 0
-        end
-        abort unless delete
-
-        begin
-          client.user_delete(username)
-        rescue StandardError => ex
-          abort "Failed to delete user: #{ex}"
         end
       end
     end
