@@ -15,7 +15,7 @@ module Cyclid
     class Tilapia
       attr_reader :config, :logger
 
-      def initialize(config_path, log_level=Logger::FATAL)
+      def initialize(config_path, log_level = Logger::FATAL)
         @config = Config.new(config_path)
 
         @logger = Logger.new(STDERR)
@@ -37,12 +37,25 @@ module Cyclid
       def sign_request(request, uri)
         signer = Cyclid::HMAC::Signer.new
 
+        method = if request.is_a? Net::HTTP::Get
+                   'GET'
+                 elsif request.is_a? Net::HTTP::Post
+                   'POST'
+                 elsif request.is_a? Net::HTTP::Put
+                   'PUT'
+                 elsif request.is_a? Net::HTTP::Delete
+                   'DELETE'
+                 else
+                   raise "invalid request method #{request.inspect}"
+                 end
+
         nonce = SecureRandom.hex
         headers = signer.sign_request(uri.path,
                                       @config.secret,
                                       auth_header_format: '%{auth_scheme} %{username}:%{signature}',
                                       username: @config.username,
-                                      nonce: nonce)
+                                      nonce: nonce,
+                                      method: method)
 
         headers[0].each do |k, v|
           request[k] = v
@@ -58,7 +71,9 @@ module Cyclid
         # Return immediately if the response was an HTTP 200 OK
         return response_data if res.code == '200'
 
-        raise "Server request failed with error ##{res.code}: #{response_data['message']}"
+        @logger.info "server request failed with error ##{res.code}: \
+                     #{response_data['description']}"
+        raise response_data['description']
       rescue Oj::ParseError => ex
         @logger.debug ex
         raise 'failed to decode server response body'
