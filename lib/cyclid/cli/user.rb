@@ -68,7 +68,50 @@ module Cyclid
       end
 
       desc 'modify USERNAME', 'Modify the user USERNAME'
+      long_desc <<-LONGDESC
+        Modify the user USERNAME.
+
+        The --email option sets the users email address.
+
+        The --password option sets an encrypted password for HTTP Basic authentication and Cyclid
+        UI console logins.
+
+        The --secret option sets a shared secret which is used for signing Cyclid API requests.
+      LONGDESC
+      option :email, aliases: '-e'
+      option :password, aliases: '-p'
+      option :secret, aliases: '-s'
       def modify(username)
+        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+        begin
+          client.user_modify(username,
+                             email: options[:email],
+                             password: options[:password],
+                             secret: options[:secret])
+        rescue StandardError => ex
+          abort "Failed to modify user: #{ex}"
+        end
+      end
+
+      desc 'passwd USERNAME', 'Change the password of the user USERNAME'
+      def passwd(username)
+        # Get the new password
+        print 'Password: '
+        password = STDIN.noecho(&:gets).chomp
+        print "\nConfirm password: "
+        confirm = STDIN.noecho(&:gets).chomp
+        print "\n"
+        abort 'Passwords do not match' unless password == confirm
+
+        # Modify the user with the new password
+        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+        begin
+          client.user_modify(username, password: password)
+        rescue StandardError => ex
+          abort "Failed to modify user: #{ex}"
+        end
       end
 
       desc 'delete USERNAME', 'Delete the user USERNAME'
