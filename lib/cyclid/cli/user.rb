@@ -42,7 +42,7 @@ module Cyclid
         end
       end
 
-      desc 'add USERNAME EMAIL [<password>] [<secret>]', 'Create a new user USERNAME'
+      desc 'add USERNAME EMAIL', 'Create a new user USERNAME'
       long_desc <<-LONGDESC
         Create a user USERNAME with the email address EMAIL. The new user will not be a member of
         any organization.
