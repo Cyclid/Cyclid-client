@@ -9,6 +9,7 @@ GEM
   specs:
     ast (2.2.0)
     bcrypt (3.1.11)
+    colorize (0.7.7)
     oj (2.15.0)
     parser (2.3.0.7)
       ast (~> 2.2)
@@ -32,6 +33,7 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt
+  colorize
   cyclid-core!
   oj
   rake

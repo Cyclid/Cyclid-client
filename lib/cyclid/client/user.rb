@@ -23,6 +23,19 @@ module Cyclid
         return users
       end
 
+      # Get details of a specific user
+      def user_get(username)
+        uri = server_uri("/users/#{username}")
+        req = sign_request(Net::HTTP::Get.new(uri), uri)
+
+        http = Net::HTTP.new(uri.hostname, uri.port)
+        res = http.request(req)
+
+        res_data = parse_response(res)
+        @logger.debug res_data
+        return res_data
+      end
+
       # Create a new user
       def user_add(username, email, password = nil, secret = nil)
         # Create the user object
@@ -52,6 +65,19 @@ module Cyclid
         @logger.debug res_data
 
         raise "Failed to create new user: #{res_data.message}" unless res.code == '200'
+      end
+
+      # Delete a user
+      def user_delete(username)
+        uri = server_uri("/users/#{username}")
+        req = sign_request(Net::HTTP::Delete.new(uri), uri)
+
+        http = Net::HTTP.new(uri.hostname, uri.port)
+        res = http.request(req)
+
+        res_data = parse_response(res)
+        @logger.debug res_data
+        return res_data
       end
     end
   end

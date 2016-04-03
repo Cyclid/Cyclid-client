@@ -1,3 +1,5 @@
+require 'colorize'
+
 # Cyclid top level module
 module Cyclid
   module Cli
@@ -10,10 +12,33 @@ module Cyclid
         begin
           users = client.user_list
           users.each do |user|
-            STDOUT.puts user
+            puts user
           end
         rescue StandardError => ex
           abort "Failed to retrieve list of users: #{ex}"
+        end
+      end
+
+      desc 'show USERNAME', 'Show details of the user USERNAME'
+      def show(username)
+        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+        begin
+          user = client.user_get(username)
+
+          # Pretty print the user details
+          puts "Username: ".colorize(:cyan) + user['username']
+          puts "Email: ".colorize(:cyan) + user['email']
+          puts 'Organizations'.colorize(:cyan)
+          if user['organizations'].any?
+            user['organizations'].each do |org|
+              puts "\t#{org}"
+            end
+          else
+            puts "\tNone"
+          end
+        rescue StandardError => ex
+          abort "Failed to get user: #{ex}"
         end
       end
 
@@ -39,6 +64,35 @@ module Cyclid
           client.user_add(username, email, options[:password], options[:secret])
         rescue StandardError => ex
           abort "Failed to create new user: #{ex}"
+        end
+      end
+
+      desc 'modify USERNAME', 'Modify the user USERNAME'
+      def modify(username)
+      end
+
+      desc 'delete USERNAME', 'Delete the user USERNAME'
+      long_desc <<-LONGDESC
+        Delete the user USERNAME from the server.
+
+        The --force option will delete the user without asking for confirmation.
+      LONGDESC
+      option :force, aliases: '-f', type: :boolean
+      def delete(username)
+        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+        if options[:force]
+          delete = true
+        else
+          print "Delete user #{username}: are you sure? (Y/n): ".colorize(:red)
+          delete = STDIN.getc.chr.casecmp('y') == 0
+        end
+        abort unless delete
+
+        begin
+          client.user_delete(username)
+        rescue StandardError => ex
+          abort "Failed to delete user: #{ex}"
         end
       end
     end
