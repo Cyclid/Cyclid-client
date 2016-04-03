@@ -27,8 +27,8 @@ module Cyclid
           user = client.user_get(username)
 
           # Pretty print the user details
-          puts "Username: ".colorize(:cyan) + user['username']
-          puts "Email: ".colorize(:cyan) + user['email']
+          puts 'Username: '.colorize(:cyan) + user['username']
+          puts 'Email: '.colorize(:cyan) + user['email']
           puts 'Organizations'.colorize(:cyan)
           if user['organizations'].any?
             user['organizations'].each do |org|
