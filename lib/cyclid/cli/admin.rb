@@ -1,3 +1,6 @@
+require 'base64'
+require 'openssl'
+
 module Cyclid
   module Cli
     # 'admin user' sub-commands
@@ -26,7 +29,7 @@ module Cyclid
           # Pretty print the user details
           puts 'Username: '.colorize(:cyan) + user['username']
           puts 'Email: '.colorize(:cyan) + user['email']
-          puts 'Organizations'.colorize(:cyan)
+          puts 'Organizations:'.colorize(:cyan)
           if user['organizations'].any?
             user['organizations'].each do |org|
               puts "\t#{org}"
@@ -150,6 +153,34 @@ module Cyclid
           end
         rescue StandardError => ex
           abort "Failed to retrieve list of organizations: #{ex}"
+        end
+      end
+
+      desc 'show NAME', 'Show details of the organization NAME'
+      def show(name)
+        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+        begin
+          org = client.org_get(name)
+
+          # Convert the public key to PEM
+          der_key = Base64::decode64(org['public_key'])
+          public_key = OpenSSL::PKey::RSA.new(der_key)
+
+          # Pretty print the organization details
+          puts 'Name: '.colorize(:cyan) + org['name']
+          puts 'Owner Email: '.colorize(:cyan) + org['owner_email']
+          puts 'Public Key: '.colorize(:cyan) + public_key.to_pem
+          puts 'Members:'.colorize(:cyan)
+          if org['users'].any?
+            org['users'].each do |user|
+              puts "\t#{user}"
+            end
+          else
+            puts "\tNone"
+          end
+        rescue StandardError => ex
+          abort "Failed to get user: #{ex}"
         end
       end
     end

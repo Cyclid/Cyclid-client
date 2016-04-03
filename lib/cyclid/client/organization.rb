@@ -15,6 +15,15 @@ module Cyclid
 
         return orgs
       end
+
+      # Get details of a specific organization
+      def org_get(name)
+        uri = server_uri("/organizations/#{name}")
+        res_data = signed_get(uri)
+        @logger.debug res_data
+
+        return res_data
+      end
     end
   end
 end
