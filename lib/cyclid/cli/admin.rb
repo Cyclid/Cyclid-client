@@ -42,7 +42,7 @@ module Cyclid
         end
       end
 
-      desc 'add USERNAME EMAIL', 'Create a new user USERNAME'
+      desc 'create USERNAME EMAIL', 'Create a new user USERNAME'
       long_desc <<-LONGDESC
         Create a user USERNAME with the email address EMAIL. The new user will not be a member of
         any organization.
@@ -57,7 +57,7 @@ module Cyclid
       LONGDESC
       option :password, aliases: '-p'
       option :secret, aliases: '-s'
-      def add(username, email)
+      def create(username, email)
         client = Cyclid::Client::Tilapia.new(options[:config], debug?)
 
         begin
@@ -164,7 +164,7 @@ module Cyclid
           org = client.org_get(name)
 
           # Convert the public key to PEM
-          der_key = Base64::decode64(org['public_key'])
+          der_key = Base64.decode64(org['public_key'])
           public_key = OpenSSL::PKey::RSA.new(der_key)
 
           # Pretty print the organization details
