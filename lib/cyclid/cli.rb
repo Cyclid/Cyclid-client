@@ -15,7 +15,8 @@ end
 
 module Cyclid
   module Cli
-    CYCLID_CONFIG_PATH = File.join(ENV['HOME'], '.cyclid', 'config')
+    CYCLID_CONFIG_DIR = File.join(ENV['HOME'], '.cyclid')
+    CYCLID_CONFIG_PATH = File.join(CYCLID_CONFIG_DIR, 'config')
 
     # Top level Thor-based CLI
     class Command < Thor
