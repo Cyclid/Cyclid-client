@@ -27,6 +27,10 @@ module Cyclid
 
       desc 'user', 'Manage users'
       subcommand 'user', User
+
+      desc 'organization', 'Manage organizations'
+      subcommand 'organization', Organization
+      map 'org' => :organization
     end
   end
 end

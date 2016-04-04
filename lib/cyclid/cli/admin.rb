@@ -180,7 +180,7 @@ module Cyclid
             puts "\tNone"
           end
         rescue StandardError => ex
-          abort "Failed to get user: #{ex}"
+          abort "Failed to get organization: #{ex}"
         end
       end
 
