@@ -125,7 +125,7 @@ module Cyclid
                      #{response_data['description']}"
         raise response_data['description']
       rescue Oj::ParseError => ex
-        @logger.debug ex
+        @logger.debug "body: #{res.body}\n#{ex}"
         raise 'failed to decode server response body'
       end
     end

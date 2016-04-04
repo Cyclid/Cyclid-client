@@ -183,6 +183,45 @@ module Cyclid
           abort "Failed to get user: #{ex}"
         end
       end
+
+      desc 'create NAME OWNER-EMAIL', 'Create a new organization NAME'
+      long_desc <<-LONGDESC
+        Create an organization NAME with the owner email address EMAIL.
+      LONGDESC
+      def create(name, email)
+        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+        begin
+          client.org_add(name, email)
+        rescue StandardError => ex
+          abort "Failed to create new organization: #{ex}"
+        end
+      end
+
+      desc 'delete NAME', 'Delete the organization NAME'
+      long_desc <<-LONGDESC
+        Delete the organization NAME from the server.
+
+        The --force option will delete the organization without asking for confirmation.
+      LONGDESC
+      option :force, aliases: '-f', type: :boolean
+      def delete(name)
+        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+        if options[:force]
+          delete = true
+        else
+          print "Delete organization #{name}: are you sure? (Y/n): ".colorize(:red)
+          delete = STDIN.getc.chr.casecmp('y') == 0
+        end
+        abort unless delete
+
+        begin
+          client.org_delete(name)
+        rescue StandardError => ex
+          abort "Failed to delete organization: #{ex}"
+        end
+      end
     end
 
     # 'admin' sub-command
