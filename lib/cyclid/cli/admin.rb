@@ -198,6 +198,30 @@ module Cyclid
         end
       end
 
+      desc 'modify NAME', 'Modify the organization NAME'
+      long_desc <<-LONGDESC
+        Modify the organization NAME.
+
+        The --email option sets the owners email address.
+
+        The --members options sets the list of organization members.
+
+        *WARNING* --members will overwrite the existing list of members, so use with care!
+      LONGDESC
+      option :email, aliases: '-e'
+      option :members, aliases: '-m', type: :array
+      def modify(name)
+        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+        begin
+          client.org_modify(name,
+                            owner_email: options[:email],
+                            members: options[:members])
+        rescue StandardError => ex
+          abort "Failed to modify organization: #{ex}"
+        end
+      end
+
       desc 'delete NAME', 'Delete the organization NAME'
       long_desc <<-LONGDESC
         Delete the organization NAME from the server.
