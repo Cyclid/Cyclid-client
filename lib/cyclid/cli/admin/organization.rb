@@ -39,9 +39,24 @@ module Cyclid
       desc 'create NAME OWNER-EMAIL', 'Create a new organization NAME'
       long_desc <<-LONGDESC
         Create an organization NAME with the owner email address EMAIL.
+
+        The --admin option adds a user as the initial organization administrator.
       LONGDESC
+      option :admin, aliases: '-a'
       def create(name, email)
         client.org_add(name, email)
+
+        if options[:admin]
+          # Add the user to the organization and create the appropriate admin
+          # permissions for them.
+          client.org_modify(name,
+                            members: options[:admin])
+
+          perms = { 'admin' => true, 'write' => true, 'read' => true }
+          client.org_user_permissions(name,
+                                      options[:admin],
+                                      perms)
+        end
       rescue StandardError => ex
         abort "Failed to create new organization: #{ex}"
       end
