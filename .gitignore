@@ -1,10 +1,9 @@
 # Development artifacts
 vendor
 .bundle
-.yardoc
-doc
 *.swp
 coverage
+pkg
 
 # OS artifacts
 .DS_Store

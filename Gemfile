@@ -1,13 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'thor'
-gem 'require_all'
-gem 'oj'
-gem 'bcrypt'
-gem 'colorize'
+gemspec
+
 gem 'cyclid-core', path: '../Cyclid-core/'
 
 group :development, :test do
   gem 'rake'
+  gem 'rubygems-tasks'
   gem 'rubocop'
 end

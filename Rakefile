@@ -4,6 +4,9 @@ begin
   require 'bundler/setup'
 end
 
+require 'rubygems/tasks'
+Gem::Tasks.new
+
 begin
   require 'rubocop/rake_task'
 
