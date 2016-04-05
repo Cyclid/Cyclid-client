@@ -7,39 +7,31 @@ module Cyclid
     class AdminUser < Thor
       desc 'list', 'List all of the users'
       def list
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        begin
-          users = client.user_list
-          users.each do |user|
-            puts user
-          end
-        rescue StandardError => ex
-          abort "Failed to retrieve list of users: #{ex}"
+        users = client.user_list
+        users.each do |user|
+          puts user
         end
+      rescue StandardError => ex
+        abort "Failed to retrieve list of users: #{ex}"
       end
 
       desc 'show USERNAME', 'Show details of the user USERNAME'
       def show(username)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+        user = client.user_get(username)
 
-        begin
-          user = client.user_get(username)
-
-          # Pretty print the user details
-          puts 'Username: '.colorize(:cyan) + user['username']
-          puts 'Email: '.colorize(:cyan) + user['email']
-          puts 'Organizations:'.colorize(:cyan)
-          if user['organizations'].any?
-            user['organizations'].each do |org|
-              puts "\t#{org}"
-            end
-          else
-            puts "\tNone"
+        # Pretty print the user details
+        puts 'Username: '.colorize(:cyan) + user['username']
+        puts 'Email: '.colorize(:cyan) + user['email']
+        puts 'Organizations:'.colorize(:cyan)
+        if user['organizations'].any?
+          user['organizations'].each do |org|
+            puts "\t#{org}"
           end
-        rescue StandardError => ex
-          abort "Failed to get user: #{ex}"
+        else
+          puts "\tNone"
         end
+      rescue StandardError => ex
+        abort "Failed to get user: #{ex}"
       end
 
       desc 'create USERNAME EMAIL', 'Create a new user USERNAME'
@@ -58,13 +50,9 @@ module Cyclid
       option :password, aliases: '-p'
       option :secret, aliases: '-s'
       def create(username, email)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        begin
-          client.user_add(username, email, options[:password], options[:secret])
-        rescue StandardError => ex
-          abort "Failed to create new user: #{ex}"
-        end
+        client.user_add(username, email, options[:password], options[:secret])
+      rescue StandardError => ex
+        abort "Failed to create new user: #{ex}"
       end
 
       desc 'modify USERNAME', 'Modify the user USERNAME'
@@ -82,16 +70,12 @@ module Cyclid
       option :password, aliases: '-p'
       option :secret, aliases: '-s'
       def modify(username)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        begin
-          client.user_modify(username,
-                             email: options[:email],
-                             password: options[:password],
-                             secret: options[:secret])
-        rescue StandardError => ex
-          abort "Failed to modify user: #{ex}"
-        end
+        client.user_modify(username,
+                           email: options[:email],
+                           password: options[:password],
+                           secret: options[:secret])
+      rescue StandardError => ex
+        abort "Failed to modify user: #{ex}"
       end
 
       desc 'passwd USERNAME', 'Change the password of the user USERNAME'
@@ -105,8 +89,6 @@ module Cyclid
         abort 'Passwords do not match' unless password == confirm
 
         # Modify the user with the new password
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
         begin
           client.user_modify(username, password: password)
         rescue StandardError => ex
@@ -122,8 +104,6 @@ module Cyclid
       LONGDESC
       option :force, aliases: '-f', type: :boolean
       def delete(username)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
         if options[:force]
           delete = true
         else
@@ -144,44 +124,36 @@ module Cyclid
     class AdminOrganization < Thor
       desc 'list', 'List all of the organizations'
       def list
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        begin
-          orgs = client.org_list
-          orgs.each do |org|
-            puts org
-          end
-        rescue StandardError => ex
-          abort "Failed to retrieve list of organizations: #{ex}"
+        orgs = client.org_list
+        orgs.each do |org|
+          puts org
         end
+      rescue StandardError => ex
+        abort "Failed to retrieve list of organizations: #{ex}"
       end
 
       desc 'show NAME', 'Show details of the organization NAME'
       def show(name)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+        org = client.org_get(name)
 
-        begin
-          org = client.org_get(name)
+        # Convert the public key to PEM
+        der_key = Base64.decode64(org['public_key'])
+        public_key = OpenSSL::PKey::RSA.new(der_key)
 
-          # Convert the public key to PEM
-          der_key = Base64.decode64(org['public_key'])
-          public_key = OpenSSL::PKey::RSA.new(der_key)
-
-          # Pretty print the organization details
-          puts 'Name: '.colorize(:cyan) + org['name']
-          puts 'Owner Email: '.colorize(:cyan) + org['owner_email']
-          puts 'Public Key: '.colorize(:cyan) + public_key.to_pem
-          puts 'Members:'.colorize(:cyan)
-          if org['users'].any?
-            org['users'].each do |user|
-              puts "\t#{user}"
-            end
-          else
-            puts "\tNone"
+        # Pretty print the organization details
+        puts 'Name: '.colorize(:cyan) + org['name']
+        puts 'Owner Email: '.colorize(:cyan) + org['owner_email']
+        puts 'Public Key: '.colorize(:cyan) + public_key.to_pem
+        puts 'Members:'.colorize(:cyan)
+        if org['users'].any?
+          org['users'].each do |user|
+            puts "\t#{user}"
           end
-        rescue StandardError => ex
-          abort "Failed to get organization: #{ex}"
+        else
+          puts "\tNone"
         end
+      rescue StandardError => ex
+        abort "Failed to get organization: #{ex}"
       end
 
       desc 'create NAME OWNER-EMAIL', 'Create a new organization NAME'
@@ -189,13 +161,9 @@ module Cyclid
         Create an organization NAME with the owner email address EMAIL.
       LONGDESC
       def create(name, email)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        begin
-          client.org_add(name, email)
-        rescue StandardError => ex
-          abort "Failed to create new organization: #{ex}"
-        end
+        client.org_add(name, email)
+      rescue StandardError => ex
+        abort "Failed to create new organization: #{ex}"
       end
 
       desc 'modify NAME', 'Modify the organization NAME'
@@ -211,15 +179,11 @@ module Cyclid
       option :email, aliases: '-e'
       option :members, aliases: '-m', type: :array
       def modify(name)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        begin
-          client.org_modify(name,
-                            owner_email: options[:email],
-                            members: options[:members])
-        rescue StandardError => ex
-          abort "Failed to modify organization: #{ex}"
-        end
+        client.org_modify(name,
+                          owner_email: options[:email],
+                          members: options[:members])
+      rescue StandardError => ex
+        abort "Failed to modify organization: #{ex}"
       end
 
       desc 'delete NAME', 'Delete the organization NAME'
@@ -230,8 +194,6 @@ module Cyclid
       LONGDESC
       option :force, aliases: '-f', type: :boolean
       def delete(name)
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
         if options[:force]
           delete = true
         else

@@ -7,25 +7,21 @@ module Cyclid
     class User < Thor
       desc 'show', 'Show your user details'
       def show
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+        user = client.user_get(client.config.username)
 
-        begin
-          user = client.user_get(client.config.username)
-
-          # Pretty print the user details
-          puts 'Username: '.colorize(:cyan) + user['username']
-          puts 'Email: '.colorize(:cyan) + user['email']
-          puts 'Organizations'.colorize(:cyan)
-          if user['organizations'].any?
-            user['organizations'].each do |org|
-              puts "\t#{org}"
-            end
-          else
-            puts "\tNone"
+        # Pretty print the user details
+        puts 'Username: '.colorize(:cyan) + user['username']
+        puts 'Email: '.colorize(:cyan) + user['email']
+        puts 'Organizations'.colorize(:cyan)
+        if user['organizations'].any?
+          user['organizations'].each do |org|
+            puts "\t#{org}"
           end
-        rescue StandardError => ex
-          abort "Failed to get user: #{ex}"
+        else
+          puts "\tNone"
         end
+      rescue StandardError => ex
+        abort "Failed to get user: #{ex}"
       end
 
       desc 'modify', 'Modify your user'
@@ -43,16 +39,12 @@ module Cyclid
       option :password, aliases: '-p'
       option :secret, aliases: '-s'
       def modify
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        begin
-          client.user_modify(client.config.username,
-                             email: options[:email],
-                             password: options[:password],
-                             secret: options[:secret])
-        rescue StandardError => ex
-          abort "Failed to modify user: #{ex}"
-        end
+        client.user_modify(client.config.username,
+                           email: options[:email],
+                           password: options[:password],
+                           secret: options[:secret])
+      rescue StandardError => ex
+        abort "Failed to modify user: #{ex}"
       end
 
       desc 'passwd', 'Change your password'
@@ -66,8 +58,6 @@ module Cyclid
         abort 'Passwords do not match' unless password == confirm
 
         # Modify the user with the new password
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
         begin
           client.user_modify(client.config.username, password: password)
         rescue StandardError => ex

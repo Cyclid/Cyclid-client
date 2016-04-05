@@ -8,30 +8,26 @@ module Cyclid
     class Organization < Thor
       desc 'show', 'Show details of the organization'
       def show
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+        org = client.org_get(client.config.organization)
 
-        begin
-          org = client.org_get(client.config.organization)
+        # Convert the public key to PEM
+        der_key = Base64.decode64(org['public_key'])
+        public_key = OpenSSL::PKey::RSA.new(der_key)
 
-          # Convert the public key to PEM
-          der_key = Base64.decode64(org['public_key'])
-          public_key = OpenSSL::PKey::RSA.new(der_key)
-
-          # Pretty print the organization details
-          puts 'Name: '.colorize(:cyan) + org['name']
-          puts 'Owner Email: '.colorize(:cyan) + org['owner_email']
-          puts 'Public Key: '.colorize(:cyan) + public_key.to_pem
-          puts 'Members:'.colorize(:cyan)
-          if org['users'].any?
-            org['users'].each do |user|
-              puts "\t#{user}"
-            end
-          else
-            puts "\tNone"
+        # Pretty print the organization details
+        puts 'Name: '.colorize(:cyan) + org['name']
+        puts 'Owner Email: '.colorize(:cyan) + org['owner_email']
+        puts 'Public Key: '.colorize(:cyan) + public_key.to_pem
+        puts 'Members:'.colorize(:cyan)
+        if org['users'].any?
+          org['users'].each do |user|
+            puts "\t#{user}"
           end
-        rescue StandardError => ex
-          abort "Failed to get organization: #{ex}"
+        else
+          puts "\tNone"
         end
+      rescue StandardError => ex
+        abort "Failed to get organization: #{ex}"
       end
 
       desc 'modify', 'Modify the organization'
@@ -42,14 +38,10 @@ module Cyclid
       LONGDESC
       option :email, aliases: '-e'
       def modify
-        client = Cyclid::Client::Tilapia.new(options[:config], debug?)
-
-        begin
-          client.org_modify(client.config.organization,
-                            owner_email: options[:email])
-        rescue StandardError => ex
-          abort "Failed to modify organization: #{ex}"
-        end
+        client.org_modify(client.config.organization,
+                          owner_email: options[:email])
+      rescue StandardError => ex
+        abort "Failed to modify organization: #{ex}"
       end
 
       desc 'list', 'List your available organizations'

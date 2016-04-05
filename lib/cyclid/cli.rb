@@ -8,6 +8,10 @@ require 'cyclid/client'
 class Thor
   private
 
+  def client
+    @client ||= Cyclid::Client::Tilapia.new(options[:config], debug?)
+  end
+
   def debug?
     options[:debug] ? Logger::DEBUG : Logger::FATAL
   end
