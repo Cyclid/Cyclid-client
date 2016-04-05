@@ -62,6 +62,28 @@ module Cyclid
         return res_data
       end
 
+      # Get details of an organization member
+      def org_user_get(name, username)
+        uri = server_uri("/organizations/#{name}/members/#{username}")
+        res_data = signed_get(uri)
+        @logger.debug res_data
+
+        return res_data
+      end
+
+      # Modify the permissions for an organization member
+      def org_user_permissions(name, username, permissions)
+        perms = { 'permissions' => permissions }
+
+        @logger.debug perms
+
+        uri = server_uri("/organizations/#{name}/members/#{username}")
+        res_data = signed_json_put(uri, perms)
+        @logger.debug res_data
+
+        return res_data
+      end
+
       # Delete an organization
       def org_delete(name)
         uri = server_uri("/organizations/#{name}")

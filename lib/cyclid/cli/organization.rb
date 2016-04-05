@@ -72,6 +72,76 @@ module Cyclid
           end
         end
 
+        desc 'permission USER PERMISSION', 'Modify a members organization permissions'
+        long_desc <<-LONGDESC
+          Modify the organization permissions for USER.
+
+          PERMISSION must be one of:
+            * admin - Give the user organization administrator permissions.
+            * write - Give the user organization create/modify permissions.
+            * read  - Give the user organization read permissions.
+            * none  - Remove all organization permissions.
+
+          With 'none' the user remains an organization member but can not
+          interact with it. See the 'member remove' command if you want to
+          actually remove a user from your organization.
+        LONGDESC
+        def permission(user, permission)
+          client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+          begin
+            perms = case permission.downcase
+                    when 'admin'
+                      { 'admin' => true, 'write' => true, 'read' => true }
+                    when 'write'
+                      { 'admin' => false, 'write' => true, 'read' => true }
+                    when 'read'
+                      { 'admin' => false, 'write' => false, 'read' => true }
+                    when 'none'
+                      { 'admin' => false, 'write' => false, 'read' => false }
+                    else
+                      raise "invalid permission #{permission}"
+                    end
+
+            client.org_user_permissions(client.config.organization, user, perms)
+          rescue StandardError => ex
+            abort "Failed to modify user permissions: #{ex}"
+          end
+        end
+
+        desc 'list', 'List organization members'
+        def list
+          client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+          begin
+            org = client.org_get(client.config.organization)
+            org['users'].each do |user|
+              puts user
+            end
+          rescue StandardError => ex
+            abort "Failed to get organization members: #{ex}"
+          end
+        end
+
+        desc 'show USER', 'Show details of an organization member'
+        def show(user)
+          client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+          begin
+            user = client.org_user_get(client.config.organization, user)
+
+            # Pretty print the user details
+            puts 'Username: '.colorize(:cyan) + user['username']
+            puts 'Email: '.colorize(:cyan) + user['email']
+            puts 'Permissions'.colorize(:cyan)
+            user['permissions'].each do |k, v|
+              puts "\t#{k.capitalize}: ".colorize(:cyan) + v.to_s
+            end
+          rescue StandardError => ex
+            abort "Failed to get user: #{ex}"
+          end
+        end
+
         desc 'remove USERS', 'Remove users from the organization'
         long_desc <<-LONGDESC
           Remove the list of USERS from the organization.
