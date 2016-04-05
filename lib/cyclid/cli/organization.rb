@@ -108,6 +108,7 @@ module Cyclid
             abort "Failed to modify user permissions: #{ex}"
           end
         end
+        map 'perms' => :permission
 
         desc 'list', 'List organization members'
         def list
