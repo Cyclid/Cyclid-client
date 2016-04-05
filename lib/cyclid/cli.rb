@@ -36,6 +36,9 @@ module Cyclid
       desc 'organization', 'Manage organizations'
       subcommand 'organization', Organization
       map 'org' => :organization
+
+      desc 'job', 'Manage jobs'
+      subcommand 'job', Job
     end
   end
 end

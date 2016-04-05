@@ -7,6 +7,7 @@ require 'cyclid/hmac'
 
 require 'cyclid/client/user'
 require 'cyclid/client/organization'
+require 'cyclid/client/job'
 
 module Cyclid
   module Client
@@ -25,6 +26,7 @@ module Cyclid
 
       include User
       include Organization
+      include Job
 
       private
 
