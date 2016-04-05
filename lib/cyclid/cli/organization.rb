@@ -50,6 +50,66 @@ module Cyclid
         end
       end
 
+      # Commands for managing organization members
+      class Member < Thor
+        desc 'add USERS', 'Add users to the organization'
+        def add(*users)
+          client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+          begin
+            org = client.org_get(client.config.organization)
+
+            # Concat the new list with the existing list and remove any
+            # duplicates.
+            user_list = org['users']
+            user_list.concat users
+            user_list.uniq!
+
+            client.org_modify(client.config.organization,
+                              members: user_list)
+          rescue StandardError => ex
+            abort "Failed to add users to the organization: #{ex}"
+          end
+        end
+
+        desc 'remove USERS', 'Remove users from the organization'
+        long_desc <<-LONGDESC
+          Remove the list of USERS from the organization.
+
+          The --force option will remove the users without asking for confirmation.
+        LONGDESC
+        option :force, aliases: '-f', type: :boolean
+        def remove(*users)
+          client = Cyclid::Client::Tilapia.new(options[:config], debug?)
+
+          begin
+            org = client.org_get(client.config.organization)
+
+            # Remove any users that exist as members of this organization;
+            # ask for confirmation on a per-user basis (unless '-f' was passed)
+            user_list = org['users']
+            user_list.delete_if do |user|
+              if users.include? user
+                if options[:force]
+                  true
+                else
+                  print "Remove user #{user}: are you sure? (Y/n): ".colorize(:red)
+                  STDIN.getc.chr.casecmp('y') == 0
+                end
+              end
+            end
+            user_list.uniq!
+
+            client.org_modify(client.config.organization,
+                              members: user_list)
+          rescue StandardError => ex
+            abort "Failed to remove users from the organization: #{ex}"
+          end
+        end
+      end
+      desc 'member', 'Manage organization members'
+      subcommand 'member', Member
+
       desc 'list', 'List your available organizations'
       def list
         Dir.glob("#{CYCLID_CONFIG_DIR}/*").each do |fname|
@@ -72,7 +132,7 @@ module Cyclid
       end
 
       desc 'use NAME', 'Select the organization NAME to use by default'
-      def use(name=nil)
+      def use(name = nil)
         # If 'use' was called without an argument, print the name of the
         # current configuration
         if name.nil?
@@ -87,7 +147,7 @@ module Cyclid
           fname = File.join(CYCLID_CONFIG_DIR, name)
 
           # Sanity check that the configuration file exists and is valid
-          abort 'No such organization' unless File.exists?(fname)
+          abort 'No such organization' unless File.exist?(fname)
           abort 'Not a valid organization' unless File.file?(fname)
 
           begin
@@ -97,7 +157,7 @@ module Cyclid
                      config.organization.nil? or \
                      config.username.nil? or \
                      config.secret.nil?
-          rescue StandardError => ex
+          rescue StandardError
             abort 'Invalid configuration file'
           end
 
