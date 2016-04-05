@@ -39,6 +39,9 @@ module Cyclid
 
       desc 'job', 'Manage jobs'
       subcommand 'job', Job
+
+      desc 'secret', 'Manage secrets'
+      subcommand 'secret', Secret
     end
   end
 end
