@@ -19,7 +19,7 @@ module Cyclid
         # Encrypt with the public key
         encrypted = public_key.public_encrypt(secret)
 
-        puts "Secret: ".colorize(:cyan) + Base64.strict_encode64(encrypted)
+        puts 'Secret: '.colorize(:cyan) + Base64.strict_encode64(encrypted)
       rescue
         abort "Failed to sign secret: #{ex}"
       end
