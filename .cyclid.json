@@ -1,0 +1,69 @@
+{
+   "name" : "Cyclid-client",
+   "environment" : {
+      "os" : "ubuntu_trusty",
+      "packages" : [
+         "ruby2.0",
+         "ruby2.0-dev"
+      ]
+   },
+   "stages" : [
+      {
+         "name" : "bundle-install",
+         "steps" : [
+            {
+               "action" : "command",
+               "cmd" : "sudo gem2.0 install bundler --no-ri --no-doc"
+            },
+            {
+               "action" : "command",
+               "cmd" : "bundle install --path vendor/bundle",
+               "path" : "%{workspace}/Cyclid-client"
+            }
+         ]
+      },
+      {
+         "name" : "lint",
+         "steps" : [
+            {
+               "action" : "command",
+               "cmd" : "bundle exec rake rubocop",
+               "path" : "%{workspace}/Cyclid-client"
+            }
+         ]
+      },
+      {
+         "name" : "build",
+         "steps" : [
+            {
+               "action" : "command",
+               "cmd" : "bundle exec rake build",
+               "path" : "%{workspace}/Cyclid-client"
+            }
+         ]
+      }
+   ],
+   "sequence" : [
+      {
+         "stage" : "bundle-install",
+         "on_success" : "lint",
+         "on_failure" : "failure"
+      },
+      {
+         "stage" : "lint",
+         "on_success" : "test",
+         "on_failure" : "failure"
+      },
+      {
+         "stage" : "build",
+         "on_success" : "success",
+         "on_failure" : "failure"
+      },
+      {
+         "stage" : "success"
+      },
+      {
+         "stage" : "failure"
+      }
+   ]
+}
