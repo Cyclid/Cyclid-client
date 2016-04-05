@@ -3,7 +3,8 @@ Gem::Specification.new do |s|
   s.version     = '0.1.0'
   s.licenses    = ['Apache-2.0']
   s.summary     = 'Cyclid command line client & library'
-  s.description = 'The Cyclid command line client for interacting with a Cyclid server, as well as a Ruby client library.'
+  s.description = 'The Cyclid command line client for interacting with a Cyclid server, as well as \
+                   a Ruby client library.'
   s.authors     = ['Kristian Van Der Vliet']
   s.email       = 'vanders@liqwyd.com'
   s.files       = Dir.glob('lib/**/*') + %w(LICENSE README.md)
