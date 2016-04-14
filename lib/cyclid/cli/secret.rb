@@ -4,8 +4,8 @@ module Cyclid
   module Cli
     # 'secret' sub-command
     class Secret < Thor
-      desc 'sign', 'Sign a secret with the organizations public key'
-      def sign
+      desc 'encrypt', 'Encrypt a secret with the organizations public key'
+      def encrypt
         # Get the organizations public key in a form we can use
         org = client.org_get(client.config.organization)
         der_key = Base64.decode64(org['public_key'])
@@ -21,7 +21,7 @@ module Cyclid
 
         puts 'Secret: '.colorize(:cyan) + Base64.strict_encode64(encrypted)
       rescue
-        abort "Failed to sign secret: #{ex}"
+        abort "Failed to encrypt secret: #{ex}"
       end
     end
   end
