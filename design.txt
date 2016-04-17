@@ -1,0 +1,69 @@
+Thor as a CLI:
+
+cyclid admin
+             user create      - Create new user (Super admins only)
+             user delete      - Delete a user (Super admins only)
+             user modify      - Modify a user (Super admins only)
+
+             org create       - Create an organization (Super admins only)
+             org delete       - Delete an organization (Super admins only)
+             org user add     - Add a user to an org
+             org user remove  - Remove a user from an org
+             org user perms   - Edit user permissions
+             org modify       - Change an organization
+
+       user  passwd           - Change the users password & HMAC secret
+       user  modify           - Change the user (E.g. email address)
+
+       org   list             - List available organizations (Ones we have config files for)
+       org   use              - Change the config file symlink to use that organization config
+
+       job   create           - Create an empty/template job file
+
+       job   submit from file - Submit a job file to the API
+
+       job   list             - List job records
+       job   show             - Show the status etc. of a job
+       job   log              - Display the log from a job
+                 watch        - If the job is active, attach a websocket and watch the log as it runs
+
+       job   secret encrypt   - Encrypt a secret with the organization public key
+             secret add       - Encrypt & add a secret to a job file
+             secret remove    - Remove a secret from a job file
+
+       job   stage add        - Create & add a new stage to a job file
+             stage remove     - Remove a stage from a job file
+             stage edit       - Edit a stage from a job file
+
+       job   sequence add     - Add a stage to the sequence in a job file
+             sequence remove  - Remove a stage in the sequence of a job file
+             sequence edit    - Edit a sequence from a job file
+
+Some of the 'job' commands operate on a job file E.g. load in the YAML or JSON file, extract the
+relevent section, allow the user to edit it, validate the edited version and merge it back into
+the original job file, then write out the modified file. Most of these will be fairly simple and
+just call $EDITOR with the relevent block of data.
+
+The CLI is just a thin wrapper on top of a client library E.g. Cyclid::Client, which provides
+classes & methods to manage all of the above and communicate with the API.
+
+Config files go in $HOME/.cyclid with one config file per. organization, per. user (E.g. the same
+way 'knife' works with 'knife block') and the "cyclid org use" command modifies a symlink to point
+to the "current" config file.
+
+Config file (YAML):
+
+organization_name:
+  user: <Username>
+  secret: <HMAC secret>
+  server: <API URL>
+
+Config file (JSON):
+
+{
+  "organization": "organization_name",
+  "user": "username",
+  "secret": "hmac secret",
+  "server": "API URL"
+}
+
