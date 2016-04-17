@@ -4,7 +4,8 @@
       "os" : "ubuntu_trusty",
       "packages" : [
          "ruby2.0",
-         "ruby2.0-dev"
+         "ruby2.0-dev",
+         "libmysqlclient-dev"
       ]
    },
    "stages" : [
