@@ -14,6 +14,7 @@
 
 require 'securerandom'
 require 'oj'
+require 'yaml'
 require 'logger'
 
 require 'cyclid/config'
@@ -61,11 +62,11 @@ module Cyclid
         parse_response(res)
       end
 
-      # Sign & perform a POST request with a JSON body
-      def signed_json_post(uri, data)
+      # Sign & perform a POST request with a pre-formatted body
+      def signed_raw_post(uri, data, content_type)
         unsigned = Net::HTTP::Post.new(uri)
-        unsigned.content_type = 'application/json'
-        unsigned.body = Oj.dump(data)
+        unsigned.content_type = content_type
+        unsigned.body = data
 
         req = sign_request(unsigned, uri)
 
@@ -73,6 +74,18 @@ module Cyclid
         res = http.request(req)
 
         parse_response(res)
+      end
+
+      # Sign & perform a POST request with a JSON body
+      def signed_json_post(uri, data)
+        json = Oj.dump(data)
+        signed_raw_post(uri, json, 'application/json')
+      end
+
+      # Sign & perform a POST request with a YAML body
+      def signed_yaml_post(uri, data)
+        yaml = YAML.dump(data)
+        signed_raw_post(uri, yaml, 'application/x-yaml')
       end
 
       # Sign & perform a PUT request with a JSON body
