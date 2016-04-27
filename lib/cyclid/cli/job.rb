@@ -12,12 +12,61 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'yaml'
+require 'json'
 require 'cyclid/constants'
 
 module Cyclid
   module Cli
     # 'job' sub-command
     class Job < Thor
+      desc 'submit FILENAME', 'Submit a job to be run'
+      long_desc <<-LONGDESC
+        Submit a job to be run by the server. FILENAME should be the path to a valid Cyclid job
+        file, in either YAML or JSON format.
+
+        Cyclid will attempt to detect the format of the job file automatically. You can force the
+        parsing format using either the --yaml or --json options.
+
+        The --yaml option causes the job file to be parsed as YAML.
+
+        The --json option causes the job file to be parsed as JSON.
+      LONGDESC
+      option :yaml, aliases: '-y'
+      option :json, aliases: '-j'
+      def submit(filename)
+        job_file = File.expand_path(filename)
+        raise 'Cannot open file' unless File.exist?(job_file)
+
+        job_type = if options[:yaml]
+                     'yaml'
+                   elsif options[:json]
+                     'json'
+                   else
+                     # Detect format
+                     match = job_file.match(/\A.*\.(json|yml|yaml)\z/)
+                     match[1]
+                   end
+        job_type = 'yaml' if job_type == 'yml'
+
+        # Do a client-side sanity check by attempting to parse the file; we
+        # don't do anything with the data but it fails-fast if the file has a
+        # syntax error
+        job = File.read(job_file)
+        if job_type == 'yaml'
+          YAML.load(job)
+        elsif job_type == 'json'
+          JSON.parse(job)
+        else
+          raise 'Unknown or unsupported file type'
+        end
+
+        job_info = client.job_submit(client.config.organization, job, job_type)
+        puts 'Job: '.colorize(:cyan) + job_info['job_id'].to_s
+      rescue StandardError => ex
+        abort "Failed to submit job: #{ex}"
+      end
+
       desc 'show JOBID', 'Show details of a job'
       def show(jobid)
         job = client.job_get(client.config.organization, jobid)

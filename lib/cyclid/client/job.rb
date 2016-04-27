@@ -16,6 +16,22 @@ module Cyclid
   module Client
     # Job related methods
     module Job
+      # Submit a job
+      def job_submit(organization, job, type)
+        uri = server_uri("/organizations/#{organization}/jobs")
+        case type
+        when 'yaml'
+          res_data = signed_raw_post(uri, job, 'application/x-yaml')
+        when 'json'
+          res_data = signed_raw_post(uri, job, 'application/json')
+        else
+          raise "Unknown job format #{type}"
+        end
+        @logger.debug res_data
+
+        return res_data
+      end
+
       # Get details of a job
       def job_get(organization, jobid)
         uri = server_uri("/organizations/#{organization}/jobs/#{jobid}")

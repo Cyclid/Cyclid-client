@@ -56,6 +56,9 @@ module Cyclid
 
       desc 'secret', 'Manage secrets'
       subcommand 'secret', Secret
+
+      desc 'stage', 'Manage stages'
+      subcommand 'stage', Stage
     end
   end
 end
