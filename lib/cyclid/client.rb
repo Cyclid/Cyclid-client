@@ -23,6 +23,7 @@ require 'cyclid/hmac'
 require 'cyclid/client/user'
 require 'cyclid/client/organization'
 require 'cyclid/client/job'
+require 'cyclid/client/stage'
 
 module Cyclid
   module Client
@@ -42,6 +43,7 @@ module Cyclid
       include User
       include Organization
       include Job
+      include Stage
 
       private
 
