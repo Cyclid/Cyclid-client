@@ -120,6 +120,9 @@ module Cyclid
 
       desc 'member', 'Manage organization members'
       subcommand 'member', Member
+
+      desc 'config', 'Manage organization configuration'
+      subcommand 'config', Config
     end
   end
 end

@@ -98,6 +98,15 @@ module Cyclid
         return res_data
       end
 
+      # Get an organization configuration for a plugin
+      def org_config_get(name, type, plugin)
+        uri = server_uri("/organizations/#{name}/configs/#{type}/#{plugin}")
+        res_data = signed_get(uri)
+        @logger.debug res_data
+
+        return res_data
+      end
+
       # Delete an organization
       def org_delete(name)
         uri = server_uri("/organizations/#{name}")
