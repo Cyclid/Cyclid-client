@@ -24,7 +24,7 @@ module Cyclid
 
         stages = []
         res_data.each do |item|
-          stages << item['name']
+          stages << { name: item['name'], version: item['version'] }
         end
 
         return stages
@@ -41,6 +41,16 @@ module Cyclid
 
       # Create a stage
       def stage_create(organization, stage)
+        uri = server_uri("/organizations/#{organization}/stages")
+        res_data = signed_json_post(uri, stage)
+        @logger.debug res_data
+
+        return res_data
+      end
+
+      # Modify a stage. Stages are actually immutable; this actually creates a
+      # new version of a stage.
+      def stage_modify(organization, stage)
         uri = server_uri("/organizations/#{organization}/stages")
         res_data = signed_json_post(uri, stage)
         @logger.debug res_data
