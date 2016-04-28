@@ -70,7 +70,7 @@ module Cyclid
         raise 'Cannot open file' unless File.exist?(stage_file)
 
         stage_type = if options[:yaml]
-                      'yaml'
+                       'yaml'
                      elsif options[:json]
                        'json'
                      else

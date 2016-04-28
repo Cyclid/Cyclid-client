@@ -37,7 +37,7 @@ module Cyclid
               puts "\tNone"
             else
               data.each do |item|
-                item.each do |k,v|
+                item.each do |k, v|
                   puts "\t#{k}: #{v}"
                 end
               end
@@ -57,12 +57,12 @@ module Cyclid
         # Inject the schema description into each config item
         schema = plugin_data['schema']
         config = plugin_data['config'].each do |k, v|
-                   description = ''
-                   schema.each do |item|
-                     description = item['description'] if item['name'] == k
-                   end
-                   {k => v, 'description' => description}
-                 end
+          description = ''
+          schema.each do |item|
+            description = item['description'] if item['name'] == k
+          end
+          { k => v, 'description' => description }
+        end
 
         # Open a text editor on the configuration
         config = invoke_editor(config)
@@ -74,4 +74,4 @@ module Cyclid
       end
     end
   end
-end 
+end

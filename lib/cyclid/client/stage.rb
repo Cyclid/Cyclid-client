@@ -24,7 +24,7 @@ module Cyclid
 
         stages = []
         res_data.each do |item|
-          stages << {name: item['name'], version: item['version']}
+          stages << { name: item['name'], version: item['version'] }
         end
 
         return stages
