@@ -20,7 +20,7 @@ module Cyclid
       def list
         stages = client.stage_list(client.config.organization)
         stages.each do |stage|
-          puts stage
+          puts "#{stage[:name]} v#{stage[:version]}"
         end
       rescue StandardError => ex
         abort "Failed to get stages: #{ex}"
@@ -34,15 +34,11 @@ module Cyclid
         stages.each do |stage|
           puts 'Name: '.colorize(:cyan) + stage['name']
           puts 'Version: '.colorize(:cyan) + stage['version']
+          puts 'Steps'.colorize(:cyan)
           stage['steps'].each do |step|
-            puts 'Steps'.colorize(:cyan)
-            # Note that we use JSON and not Oj; if we try to use Oj it will attempt to unserialise
-            # the object, which is not what we want.
-            action = JSON.parse(step['action'])
-            puts "\t#{step['sequence']}".colorize(:cyan)
-            puts "\t\tAction: ".colorize(:cyan) + action['^o'].split('::').last.downcase
-            action.delete('^o')
-            action.each do |k, v|
+            puts "\t\tAction: ".colorize(:cyan) + step['action']
+            step.delete('action')
+            step.each do |k, v|
               puts "\t\t#{k.capitalize}: ".colorize(:cyan) + v.to_s
             end
           end
@@ -101,6 +97,22 @@ module Cyclid
         client.stage_create(client.config.organization, stage_data)
       rescue StandardError => ex
         abort "Failed to create stage: #{ex}"
+      end
+
+      desc 'edit NAME', 'Edit a stage definition'
+      long_desc <<-LONGDESC
+        Edit a stage. Individual stages are immutable, but you may create a new
+        version of an existing stage using this command.
+      LONGDESC
+      def edit(name)
+        stages = client.stage_get(client.config.organization, name)
+
+        # XXX This is a hack. The API returns all stages from this endpoint;
+        # we might need to add or extend the API to return "latest" only.
+        stage = stages.last
+
+        stage = invoke_editor(stage)
+        client.stage_modify(client.config.organization, stage)
       end
     end
   end
