@@ -43,11 +43,34 @@ module Cyclid
               end
             end
           else
-            #raise "unknown schema type #{type}"
+            raise "unknown schema type #{type}"
           end
         end
       rescue StandardError => ex
         abort "Failed to get plugin configuration: #{ex}"
+      end
+
+      desc 'edit TYPE PLUGIN', 'Edit a plugin configuration'
+      def edit(type, plugin)
+        plugin_data = client.org_config_get(client.config.organization, type, plugin)
+
+        # Inject the schema description into each config item
+        schema = plugin_data['schema']
+        config = plugin_data['config'].each do |k, v|
+                   description = ''
+                   schema.each do |item|
+                     description = item['description'] if item['name'] == k
+                   end
+                   {k => v, 'description' => description}
+                 end
+
+        # Open a text editor on the configuration
+        config = invoke_editor(config)
+
+        # Submit it to the server
+        client.org_config_set(client.config.organization, type, plugin, config)
+      rescue StandardError => ex
+        abort "Failed to update plugin configuration: #{ex}"
       end
     end
   end

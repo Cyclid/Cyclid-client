@@ -29,6 +29,32 @@ class Thor
   def debug?
     options[:debug] ? Logger::DEBUG : Logger::FATAL
   end
+
+  # Open a text editor against a temporary file with the data rendered to
+  # JSON, and then re-parse the file after the user has completed editing.
+  def invoke_editor(data)
+    # Sanity check that EDITOR is set in the environment before we try to run
+    # it
+    abort('ERROR: '.colorize(:red) + 'You must set your EDITOR environment variable') \
+      if ENV['EDITOR'].nil?
+
+    # Write the data to a temporary file
+    tmpfile = Tempfile.new('cyclid')
+    tmpfile.write(JSON.pretty_generate(data))
+    tmpfile.flush
+
+    # Run the editor
+    system("#{ENV['EDITOR']} #{tmpfile.path}")
+
+    # Re-open and read it back in now that the user has finished editing it
+    tmpfile.open
+    data = JSON.parse(tmpfile.read)
+
+    tmpfile.close
+    tmpfile.unlink
+
+    return data
+  end
 end
 
 module Cyclid
