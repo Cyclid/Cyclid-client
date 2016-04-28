@@ -8,6 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ['Kristian Van Der Vliet']
   s.email       = 'vanders@liqwyd.com'
   s.files       = Dir.glob('lib/**/*') + %w(LICENSE README.md)
+  s.bindir      = 'bin'
+  s.executables << 'cyclid'
 
   s.add_runtime_dependency('thor', '~> 0.19')
   s.add_runtime_dependency('require_all', '~> 1.3')
