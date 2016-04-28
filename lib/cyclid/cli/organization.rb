@@ -13,6 +13,7 @@
 # limitations under the License.
 
 require 'colorize'
+require 'uri'
 
 require_rel 'organization/*.rb'
 

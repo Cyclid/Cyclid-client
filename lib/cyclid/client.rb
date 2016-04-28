@@ -16,6 +16,7 @@ require 'securerandom'
 require 'oj'
 require 'yaml'
 require 'logger'
+require 'uri'
 
 require 'cyclid/config'
 require 'cyclid/hmac'
