@@ -65,11 +65,12 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go)
 
 ### Configuration file format
 
-The configuration file is a simple YAML file with only four options.
+The configuration file is a simple YAML file with only five options.
 
 | Option|Required?|Description|
 |---|---|---|
-|server|Required|The hostname (and optionally the port number) of the cyclid server.|
+|server|Required|The hostname of the Cyclid server.|
+|port|Optional|The port to use for connections to the Cyclid server.|
 |organization|Required|The organization name.|
 |username|Required|The username that is associated with the organization.|
 |secret|Required|The HMAC signing secret for the user.|
