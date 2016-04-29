@@ -17,6 +17,7 @@ require 'oj'
 require 'yaml'
 require 'logger'
 require 'uri'
+require 'net/http'
 
 require 'cyclid/config'
 require 'cyclid/hmac'
