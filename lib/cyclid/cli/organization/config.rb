@@ -27,9 +27,21 @@ module Cyclid
           type = setting['type']
 
           case type
-          when 'string'
+          when 'string', 'integer'
             data = config[name] || 'Not set'
             puts "#{setting['description']}: ".colorize(:cyan) + data
+          when 'boolean'
+            data = config[name] || 'Not set'
+            puts "#{setting['description']}: ".colorize(:cyan) + (data ? 'true' : 'false')
+          when 'list'
+            data = config[name]
+            if data.empty?
+              puts "\tNone"
+            else
+              data.each do |item|
+                puts "\t#{item}"
+              end
+            end
           when 'hash-list'
             puts setting['description'].colorize(:cyan)
             data = config[name]
