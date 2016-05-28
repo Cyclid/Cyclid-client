@@ -7,6 +7,8 @@ end
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec)
 
+ENV['TEST_CONFIG'] = File.join(%w(config test))
+
 require 'rubygems/tasks'
 Gem::Tasks.new
 
