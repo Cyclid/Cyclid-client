@@ -4,6 +4,9 @@ begin
   require 'bundler/setup'
 end
 
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
+
 require 'rubygems/tasks'
 Gem::Tasks.new
 
