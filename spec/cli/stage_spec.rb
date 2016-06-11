@@ -43,9 +43,9 @@ describe Cyclid::Cli::Stage do
       context 'with a single version' do
         context 'with no steps' do
           it 'shows a stage' do
-            stage_info = [{'name' => 'test',
-                           'version' => '9.9.9',
-                           'steps' => []}]
+            stage_info = [{ 'name' => 'test',
+                            'version' => '9.9.9',
+                            'steps' => [] }]
 
             stub_request(:get, 'http://localhost:9999/organizations/admins/stages/test')
               .with(headers: { 'Accept' => '*/*',
@@ -66,11 +66,11 @@ describe Cyclid::Cli::Stage do
 
         context 'with steps' do
           it 'shows a stage' do
-            step_info = {'action' => 'test',
-                         'test' => 'data'}
-            stage_info = [{'name' => 'test',
-                           'version' => '9.9.9',
-                           'steps' => [step_info]}]
+            step_info = { 'action' => 'test',
+                          'test' => 'data' }
+            stage_info = [{ 'name' => 'test',
+                            'version' => '9.9.9',
+                            'steps' => [step_info] }]
 
             stub_request(:get, 'http://localhost:9999/organizations/admins/stages/test')
               .with(headers: { 'Accept' => '*/*',
@@ -95,12 +95,12 @@ describe Cyclid::Cli::Stage do
       context 'with multiple versions' do
         context 'with no steps' do
           it 'shows a stage' do
-            stage_info = [{'name' => 'test',
-                           'version' => '1.2.3',
-                           'steps' => []},
-                          {'name' => 'test',
-                           'version' => '9.9.9',
-                           'steps' => []}]
+            stage_info = [{ 'name' => 'test',
+                            'version' => '1.2.3',
+                            'steps' => [] },
+                          { 'name' => 'test',
+                            'version' => '9.9.9',
+                            'steps' => [] }]
 
             stub_request(:get, 'http://localhost:9999/organizations/admins/stages/test')
               .with(headers: { 'Accept' => '*/*',
@@ -124,15 +124,15 @@ describe Cyclid::Cli::Stage do
 
         context 'with steps' do
           it 'shows a stage' do
-            step_info = {'action' => 'test',
+            step_info = { 'action' => 'test',
 
-                         'test' => 'data'}
-            stage_info = [{'name' => 'test',
-                           'version' => '1.2.3',
-                           'steps' => [step_info]},
-                          {'name' => 'test',
-                           'version' => '9.9.9',
-                           'steps' => [step_info]}]
+                          'test' => 'data' }
+            stage_info = [{ 'name' => 'test',
+                            'version' => '1.2.3',
+                            'steps' => [step_info] },
+                          { 'name' => 'test',
+                            'version' => '9.9.9',
+                            'steps' => [step_info] }]
 
             stub_request(:get, 'http://localhost:9999/organizations/admins/stages/test')
               .with(headers: { 'Accept' => '*/*',
@@ -326,9 +326,9 @@ describe Cyclid::Cli::Stage do
 
     describe '#edit' do
       it 'opens the stage in a text editor' do
-        stage_info = [{'name' => 'test',
-                       'version' => '9.9.9',
-                       'steps' => []}]
+        stage_info = [{ 'name' => 'test',
+                        'version' => '9.9.9',
+                        'steps' => [] }]
 
         stub_request(:get, 'http://localhost:9999/organizations/admins/stages/test')
           .with(headers: { 'Accept' => '*/*',
@@ -349,7 +349,7 @@ describe Cyclid::Cli::Stage do
                            'User-Agent' => 'Ruby',
                            'Date' => /.*/,
                            'X-Hmac-Nonce' => /.*/ })
-          .to_return(:status => 200, :body => '{}', :headers => {})
+          .to_return(status: 200, body: '{}', headers: {})
 
         allow(subject).to receive(:invoke_editor).and_return({})
 
@@ -390,12 +390,12 @@ describe Cyclid::Cli::Stage do
                            'User-Agent' => 'Ruby',
                            'Date' => /.*/,
                            'X-Hmac-Nonce' => /.*/ })
-          .to_return(:status => 500, :body => '{}', :headers => {})
+          .to_return(status: 500, body: '{}', headers: {})
 
         allow(subject).to receive(:invoke_editor).and_return({})
 
         expect{ subject.edit('test') }.to raise_error SystemExit
       end
-    end 
+    end
   end
-end 
+end

@@ -103,7 +103,7 @@ describe Cyclid::Cli::Organization do
 
         expect{ subject.modify }.to raise_error SystemExit
       end
-    end 
+    end
 
     describe '#list' do
       before :each do
@@ -181,4 +181,4 @@ describe Cyclid::Cli::Organization do
       end
     end
   end
-end 
+end
