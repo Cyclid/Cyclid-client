@@ -3,7 +3,7 @@ require 'cli_helper'
 describe Cyclid::Cli::Secret do
   context 'using the "secret" commands' do
     before do
-      subject.options = {config: ENV['TEST_CONFIG']}
+      subject.options = { config: ENV['TEST_CONFIG'] }
       allow($stdin).to receive(:gets).and_return('sekrit')
     end
 
@@ -40,7 +40,7 @@ describe Cyclid::Cli::Secret do
           .to_return(status: 200, body: org_info.to_json, headers: {})
 
         expect{ subject.encrypt }.to raise_error SystemExit
-      end 
+      end
 
       it 'fails gracefully when the server returns a non-200 response' do
         stub_request(:get, 'http://localhost:9999/organizations/admins')

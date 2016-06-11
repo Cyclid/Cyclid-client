@@ -3,7 +3,7 @@ require 'cli_helper'
 describe Cyclid::Cli::Job do
   context 'using the "job" commands' do
     before do
-      subject.options = {config: ENV['TEST_CONFIG']}
+      subject.options = { config: ENV['TEST_CONFIG'] }
     end
 
     describe '#submit' do
@@ -199,7 +199,7 @@ describe Cyclid::Cli::Job do
 
         expect{ subject.show('1') }.to raise_error SystemExit
       end
-    end 
+    end
 
     describe '#status' do
       it 'shows a job status' do
@@ -265,4 +265,4 @@ describe Cyclid::Cli::Job do
       end
     end
   end
-end 
+end

@@ -3,14 +3,14 @@ require 'cli_helper'
 describe Cyclid::Cli::User do
   context 'using the "user" commands' do
     before do
-      subject.options = {config: ENV['TEST_CONFIG']}
+      subject.options = { config: ENV['TEST_CONFIG'] }
     end
 
     describe '#show' do
       it 'shows the details of a user with no organizations' do
-        test_user = {'username' => 'bob',
-                     'email' => 'bob@example.com',
-                     'organizations' => [] }
+        test_user = { 'username' => 'bob',
+                      'email' => 'bob@example.com',
+                      'organizations' => [] }
 
         stub_request(:get, 'http://localhost:9999/users/admin')
           .with(headers: { 'Accept' => '*/*',
@@ -29,9 +29,9 @@ describe Cyclid::Cli::User do
       end
 
       it 'shows the details of a user with organizations' do
-        test_user = {'username' => 'bob',
-                     'email' => 'bob@example.com',
-                     'organizations' => ['test'] }
+        test_user = { 'username' => 'bob',
+                      'email' => 'bob@example.com',
+                      'organizations' => ['test'] }
 
         stub_request(:get, 'http://localhost:9999/users/admin')
           .with(headers: { 'Accept' => '*/*',
@@ -126,7 +126,7 @@ describe Cyclid::Cli::User do
 
         expect{ subject.modify }.to raise_error SystemExit
       end
-    end 
+    end
 
     describe '#passwd' do
       it 'changes the password when the inputs match' do
@@ -175,6 +175,6 @@ describe Cyclid::Cli::User do
         allow($stdin).to receive(:gets).and_return('m1lkb0ne')
         expect{ subject.modify }.to raise_error SystemExit
       end
-    end 
+    end
   end
 end

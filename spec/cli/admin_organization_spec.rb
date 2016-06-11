@@ -3,7 +3,7 @@ require 'cli_helper'
 describe Cyclid::Cli::AdminOrganization do
   context 'using the "admin organization" commands' do
     before do
-      subject.options = {config: ENV['TEST_CONFIG']}
+      subject.options = { config: ENV['TEST_CONFIG'] }
     end
 
     describe '#list' do
@@ -68,7 +68,7 @@ describe Cyclid::Cli::AdminOrganization do
         pubkey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw/tWDuC1yMQz0fzMN2zgo/GaF1u6XCYFtHAm2p+VPQT1a2JEcVbCpoO0rv3Ol6LuyqfdNvseriK/3Y7yM3y3aGmr5+Krx8BM7v2QXv0Cy92p7Bkgtg4rJAFv6vF3aHFtj8DqWfInms/nwshkqVi/n2EyBv2XQl/3h+szQ+8DD7rULmDZhBQXPPdRF2zqTOHiFKsEksIkrPHX7GPI2qV4OQ5kKOBEAcAYu+r58LJFKKBOsdI4FEBH3Q4fjGkPTa7Oggr4UvjkOaUbQwnhv/wtaW4sVH7ymZrygnZJlVCyoy5P9ax+CSMrZVW6XCfU8xeMoHsyeo5GAZUHqsgONb6C7QIDAQAB'
         org_info = { 'name' => 'test',
                      'owner_email' => 'test@example.com',
-                     'users' => ['bob', 'leslie'],
+                     'users' => %w(bob leslie),
                      'public_key' => pubkey }
 
         stub_request(:get, 'http://localhost:9999/organizations/test')
@@ -140,7 +140,7 @@ describe Cyclid::Cli::AdminOrganization do
                            'Host' => 'localhost:9999',
                            'Date' => /.*/,
                            'X-Hmac-Nonce' => /.*/ })
-          .to_return(:status => 200, :body => '{}', :headers => {})
+          .to_return(status: 200, body: '{}', headers: {})
 
         stub_request(:put, 'http://localhost:9999/organizations/test/members/leslie')
           .with(body: '{"permissions":{"admin":true,"write":true,"read":true}}',
@@ -151,7 +151,7 @@ describe Cyclid::Cli::AdminOrganization do
                            'Host' => 'localhost:9999',
                            'Date' => /.*/,
                            'X-Hmac-Nonce' => /.*/ })
-          .to_return(:status => 200, :body => '{}', :headers => {})
+          .to_return(status: 200, body: '{}', headers: {})
 
         subject.options[:admin] = 'leslie'
         expect{ subject.create('test', 'test@example.com') }.to_not raise_error
@@ -208,7 +208,6 @@ describe Cyclid::Cli::AdminOrganization do
         expect{ subject.modify('test') }.to_not raise_error
       end
 
-
       it 'fails gracefully when the server returns a non-200 response' do
         stub_request(:put, 'http://localhost:9999/organizations/test')
           .with(body: '{}',
@@ -248,7 +247,7 @@ describe Cyclid::Cli::AdminOrganization do
         allow($stdin).to receive(:getc).and_return('n')
 
         expect{ subject.delete('test') }.to raise_error SystemExit
-        #expect{ subject.delete('test') }.to output(/Delete organization test: are you sure?/).to_stdout
+        # expect{ subject.delete('test') }.to output(/Delete organization test: are you sure?/).to_stdout
       end
 
       it 'deletes an organization, when forced' do
