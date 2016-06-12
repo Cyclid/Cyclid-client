@@ -173,7 +173,7 @@ describe Cyclid::Cli::User do
           .to_return(status: 404, body: '{}', headers: {})
 
         allow($stdin).to receive(:gets).and_return('m1lkb0ne')
-        expect{ subject.modify }.to raise_error SystemExit
+        expect{ subject.passwd }.to raise_error SystemExit
       end
     end
   end
