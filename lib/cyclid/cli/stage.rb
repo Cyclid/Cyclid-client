@@ -113,6 +113,8 @@ module Cyclid
 
         stage = invoke_editor(stage)
         client.stage_modify(client.config.organization, stage)
+      rescue StandardError => ex
+        abort "Failed to edit stage: #{ex}"
       end
     end
   end
