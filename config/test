@@ -1,0 +1,5 @@
+server: localhost
+port: 9999
+organization: admins
+username: admin
+secret: 43f496e3a7583685540c483a38f0bb43f3786946f1547ef4b4edd99f274033f6
