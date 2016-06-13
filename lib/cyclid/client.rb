@@ -28,6 +28,7 @@ require 'cyclid/client/job'
 require 'cyclid/client/stage'
 
 module Cyclid
+  # Cyclid client methods
   module Client
     # In case you're wondering, this class required a name: it couldn't be
     # 'Cyclid' and it couldn't be 'Client'. Tilapia are a common type of
