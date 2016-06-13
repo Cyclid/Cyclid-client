@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 require 'cli_helper'
 
 describe Cyclid::Cli::AdminOrganization do

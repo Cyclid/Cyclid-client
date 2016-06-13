@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 require 'cli_helper'
 
 describe Cyclid::Cli::Organization do
@@ -129,12 +130,10 @@ describe Cyclid::Cli::Organization do
       end
 
       # XXX There are some strange exception paths here; requires some investigation
-      if false
-        it 'fails gracefully if the configuration file is incorrect' do
-          allow(YAML).to receive(:load_file).and_return({})
+      it 'fails gracefully if the configuration file is incorrect' do
+        allow(YAML).to receive(:load_file).and_return({})
 
-          expect{ subject.list }.to output(/Failed to load config file (org1|org2)/).to_stderr
-        end
+        expect{ subject.list }.to output(/Failed to load config file (org1|org2)/).to_stderr
       end
     end
 
