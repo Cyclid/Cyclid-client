@@ -34,6 +34,7 @@ module Cyclid
             data = config[name] || 'Not set'
             puts "#{setting['description']}: ".colorize(:cyan) + (data ? 'true' : 'false')
           when 'list'
+            puts setting['description'].colorize(:cyan)
             data = config[name]
             if data.empty?
               puts "\tNone"
