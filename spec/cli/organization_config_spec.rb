@@ -40,7 +40,7 @@ describe Cyclid::Cli::Config do
         expect{ subject.show('test', 'example') }.to output(/.*Setting #1:.*thing/).to_stdout
         expect{ subject.show('test', 'example') }.to output(/.*Setting #2:.*true/).to_stdout
         expect{ subject.show('test', 'example') }.to output(/.*Setting #3/).to_stdout
-        expect{ subject.show('test', 'example') }.to output(/item1\nitem2/).to_stdout
+        expect{ subject.show('test', 'example') }.to output(/\titem1\n\titem2/).to_stdout
         expect{ subject.show('test', 'example') }.to output(/.*Setting #4/).to_stdout
         expect{ subject.show('test', 'example') }.to output(/\tkey1: value1\n\tkey2: value2/).to_stdout
       end
