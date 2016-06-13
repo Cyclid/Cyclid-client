@@ -75,7 +75,7 @@ module Cyclid
             puts "\tOrganization: ".colorize(:cyan) + config.organization
             puts "\tUsername: ".colorize(:cyan) + config.username
           rescue StandardError => ex
-            STDERR.puts "Failed to load config file #{fname}: #{ex}"
+            $stderr.print "Failed to load config file #{fname}: #{ex}"
           end
         end
       end

@@ -45,10 +45,10 @@ describe Cyclid::Client::Config do
   it 'fails gracefully if the configuration file is invalid' do
     allow(YAML).to receive(:load_file).and_return(nil)
 
-    expect{ Cyclid::Client::Config.new(ENV['TEST_CONFIG']) }.to raise_error SystemExit
+    expect{ Cyclid::Client::Config.new(ENV['TEST_CONFIG']) }.to raise_error
   end
 
   it 'fails gracefully if the configuration file can not be loaded' do
-    expect{ Cyclid::Client::Config.new('/invalid/config/file/path') }.to raise_error SystemExit
+    expect{ Cyclid::Client::Config.new('/invalid/config/file/path') }.to raise_error
   end
 end

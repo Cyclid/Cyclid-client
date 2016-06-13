@@ -29,8 +29,6 @@ module Cyclid
         @organization = @config['organization']
         @username = @config['username']
         @secret = @config['secret']
-      rescue StandardError => ex
-        abort "Failed to load configuration file #{path}: #{ex}"
       end
     end
   end

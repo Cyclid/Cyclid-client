@@ -18,7 +18,7 @@ describe Cyclid::Client::Tilapia do
     end
 
     it 'aborts if the configuration path is invalid' do
-      expect{ Cyclid::Client::Tilapia.new('/does/not/exist') }.to raise_error(SystemExit)
+      expect{ Cyclid::Client::Tilapia.new('/does/not/exist') }.to raise_error
     end
   end
 
