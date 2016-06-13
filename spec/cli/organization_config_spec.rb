@@ -8,22 +8,22 @@ describe Cyclid::Cli::Config do
 
     describe '#show' do
       it 'shows a plugin config' do
-        config_info = {'schema' => [{'name' => 'setting1',
-                                     'type' => 'string',
-                                     'description' => 'Setting #1'},
-                                     {'name' => 'setting2',
-                                      'type' => 'boolean',
-                                      'description' => 'Setting #2'},
-                                     {'name' => 'setting3',
-                                      'type' => 'list',
-                                      'description' => 'Setting #3'},
-                                     {'name' => 'setting4',
-                                      'type' => 'hash-list',
-                                      'description' => 'Setting #4'}],
-                       'config' => {'setting1' => 'thing',
-                                    'setting2' => 'false',
-                                    'setting3' => ['item1','item2'],
-                                    'setting4' => [{'key1' => 'value1'},{'key2' => 'value2'}]}}
+        config_info = { 'schema' => [{ 'name' => 'setting1',
+                                       'type' => 'string',
+                                       'description' => 'Setting #1' },
+                                     { 'name' => 'setting2',
+                                       'type' => 'boolean',
+                                       'description' => 'Setting #2' },
+                                     { 'name' => 'setting3',
+                                       'type' => 'list',
+                                       'description' => 'Setting #3' },
+                                     { 'name' => 'setting4',
+                                       'type' => 'hash-list',
+                                       'description' => 'Setting #4' }],
+                        'config' => { 'setting1' => 'thing',
+                                      'setting2' => 'false',
+                                      'setting3' => %w(item1 item2),
+                                      'setting4' => [{ 'key1' => 'value1' }, { 'key2' => 'value2' }] } }
 
         stub_request(:get, 'http://localhost:9999/organizations/admins/configs/test/example')
           .with(headers: { 'Accept' => '*/*',
@@ -45,10 +45,10 @@ describe Cyclid::Cli::Config do
       end
 
       it 'shows a plugin config with an empty list' do
-        config_info = {'schema' => [{'name' => 'setting1',
-                                      'type' => 'list',
-                                      'description' => 'Setting #1'}],
-                       'config' => {'setting1' => []}}
+        config_info = { 'schema' => [{ 'name' => 'setting1',
+                                       'type' => 'list',
+                                       'description' => 'Setting #1' }],
+                        'config' => { 'setting1' => [] } }
 
         stub_request(:get, 'http://localhost:9999/organizations/admins/configs/test/example')
           .with(headers: { 'Accept' => '*/*',
@@ -66,10 +66,10 @@ describe Cyclid::Cli::Config do
       end
 
       it 'shows a plugin config with an empty hash-list' do
-        config_info = {'schema' => [{'name' => 'setting1',
-                                      'type' => 'hash-list',
-                                      'description' => 'Setting #1'}],
-                       'config' => {'setting1' => []}}
+        config_info = { 'schema' => [{ 'name' => 'setting1',
+                                       'type' => 'hash-list',
+                                       'description' => 'Setting #1' }],
+                        'config' => { 'setting1' => [] } }
 
         stub_request(:get, 'http://localhost:9999/organizations/admins/configs/test/example')
           .with(headers: { 'Accept' => '*/*',
@@ -87,10 +87,10 @@ describe Cyclid::Cli::Config do
       end
 
       it 'fails gracefully if the schema contains an unknown type' do
-        config_info = {'schema' => [{'name' => 'setting1',
-                                     'type' => 'invalid',
-                                     'description' => 'Setting #1'}],
-                       'config' => {'setting1' => 'thing'}}
+        config_info = { 'schema' => [{ 'name' => 'setting1',
+                                       'type' => 'invalid',
+                                       'description' => 'Setting #1' }],
+                        'config' => { 'setting1' => 'thing' } }
 
         stub_request(:get, 'http://localhost:9999/organizations/admins/configs/test/example')
           .with(headers: { 'Accept' => '*/*',
@@ -123,28 +123,28 @@ describe Cyclid::Cli::Config do
     describe '#edit' do
       # See issue #7
       it 'adds the schema description to the config data' do
-        config_info = {'schema' => [{'name' => 'setting1',
-                                     'type' => 'string',
-                                     'description' => 'Setting #1'},
-                                     {'name' => 'setting2',
-                                      'type' => 'boolean',
-                                      'description' => 'Setting #2'},
-                                     {'name' => 'setting3',
-                                      'type' => 'list',
-                                      'description' => 'Setting #3'},
-                                     {'name' => 'setting4',
-                                      'type' => 'hash-list',
-                                      'description' => 'Setting #4'}],
-                       'config' => {'setting1' => 'thing',
-                                    'setting2' => 'false',
-                                    'setting3' => ['item1','item2'],
-                                    'setting4' => [{'key1' => 'value1'},{'key2' => 'value2'}]}}
+        config_info = { 'schema' => [{ 'name' => 'setting1',
+                                       'type' => 'string',
+                                       'description' => 'Setting #1' },
+                                     { 'name' => 'setting2',
+                                       'type' => 'boolean',
+                                       'description' => 'Setting #2' },
+                                     { 'name' => 'setting3',
+                                       'type' => 'list',
+                                       'description' => 'Setting #3' },
+                                     { 'name' => 'setting4',
+                                       'type' => 'hash-list',
+                                       'description' => 'Setting #4' }],
+                        'config' => { 'setting1' => 'thing',
+                                      'setting2' => 'false',
+                                      'setting3' => %w(item1 item2),
+                                      'setting4' => [{ 'key1' => 'value1' }, { 'key2' => 'value2' }] } }
 
         # The modified hash that will be produced by this method from the above input
-        expected_config = {'setting1' => 'thing',
-                           'setting2' => 'false',
-                           'setting3' =>['item1', 'item2'],
-                           'setting4' =>[{'key1' => 'value1'}, {'key2' => 'value2'}]}
+        expected_config = { 'setting1' => 'thing',
+                            'setting2' => 'false',
+                            'setting3' => %w(item1 item2),
+                            'setting4' => [{ 'key1' => 'value1' }, { 'key2' => 'value2' }] }
 
         stub_request(:get, 'http://localhost:9999/organizations/admins/configs/test/example')
           .with(headers: { 'Accept' => '*/*',

@@ -8,10 +8,10 @@ describe Cyclid::Client::Config do
   end
 
   it 'loads a valid minimal configuration and sets defaults' do
-    test_config = {'server' => 'example.com',
-                   'organization' => 'test',
-                   'username' => 'leslie',
-                   'secret' => 'sekrit'}
+    test_config = { 'server' => 'example.com',
+                    'organization' => 'test',
+                    'username' => 'leslie',
+                    'secret' => 'sekrit' }
 
     allow(YAML).to receive(:load_file).and_return(test_config)
 
@@ -25,11 +25,11 @@ describe Cyclid::Client::Config do
   end
 
   it 'loads a valid maximal configuration and does not set defaults' do
-    test_config = {'server' => 'example.com',
-                   'port' => '4242',
-                   'organization' => 'test',
-                   'username' => 'leslie',
-                   'secret' => 'sekrit'}
+    test_config = { 'server' => 'example.com',
+                    'port' => '4242',
+                    'organization' => 'test',
+                    'username' => 'leslie',
+                    'secret' => 'sekrit' }
 
     allow(YAML).to receive(:load_file).and_return(test_config)
 

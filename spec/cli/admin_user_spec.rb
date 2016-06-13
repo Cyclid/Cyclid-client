@@ -95,11 +95,11 @@ describe Cyclid::Cli::AdminUser do
 
         expect{ subject.show('bob') }.to raise_error SystemExit
       end
-    end 
+    end
 
     describe '#creates' do
       it 'creates a user with no password or secret' do
-        stub_request(:post, "http://localhost:9999/users")
+        stub_request(:post, 'http://localhost:9999/users')
           .with(body: '{"username":"leslie","email":"leslie@example.com"}',
                 headers: { 'Accept' => '*/*',
                            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -114,7 +114,7 @@ describe Cyclid::Cli::AdminUser do
       end
 
       it 'creates a user with an initial password' do
-        stub_request(:post, "http://localhost:9999/users")
+        stub_request(:post, 'http://localhost:9999/users')
           .with(body: /{"username":"leslie","email":"leslie@example.com","password":".*"}/,
                 headers: { 'Accept' => '*/*',
                            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -130,7 +130,7 @@ describe Cyclid::Cli::AdminUser do
       end
 
       it 'creates a user with an initial secret' do
-        stub_request(:post, "http://localhost:9999/users")
+        stub_request(:post, 'http://localhost:9999/users')
           .with(body: '{"username":"leslie","email":"leslie@example.com","secret":"sekrit"}',
                 headers: { 'Accept' => '*/*',
                            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -146,7 +146,7 @@ describe Cyclid::Cli::AdminUser do
       end
 
       it 'fails gracefully when the server returns a non-200 response' do
-        stub_request(:post, "http://localhost:9999/users")
+        stub_request(:post, 'http://localhost:9999/users')
           .with(body: '{"username":"leslie","email":"leslie@example.com"}',
                 headers: { 'Accept' => '*/*',
                            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -160,7 +160,7 @@ describe Cyclid::Cli::AdminUser do
         expect{ subject.create('leslie', 'leslie@example.com') }.to raise_error SystemExit
       end
     end
- 
+
     describe '#modify' do
       it 'modifies a users email' do
         stub_request(:put, 'http://localhost:9999/users/bob')
