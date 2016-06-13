@@ -21,7 +21,8 @@ module Cyclid
       attr_reader :server, :port, :organization, :username, :secret, :path
 
       def initialize(path)
-        @config = YAML.load_file(path)
+        @path = path
+        @config = YAML.load_file(@path)
 
         @server = @config['server']
         @port = @config['port'] || 80
