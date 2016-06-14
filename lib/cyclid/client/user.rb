@@ -83,7 +83,7 @@ module Cyclid
       # @see #user_delete
       # @example Change the email address of the user 'leslie'
       #   user_modify('leslie', email: 'leslie@example.com')
-      # @example Change the password & screte of the user 'bob'
+      # @example Change the password & secret of the user 'bob'
       #   user_modify('bob', secret: 'sekrit', password: 'm1lkb0ne')
       def user_modify(username, args)
         # Create the user object
