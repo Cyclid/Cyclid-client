@@ -17,6 +17,16 @@ module Cyclid
     # Job related methods
     module Job
       # Submit a job
+      # @param organization [String] Organization name.
+      # @param job [String] Raw job data in either JSON or YAML
+      # @param type [String] Job data format; either 'json' or 'yaml'
+      # @return [Hash] Decoded server response object.
+      # @example Submit a job in JSON format
+      #   job = File.read('job.json')
+      #   job_submit('example', job, 'json')
+      # @example Submit a job in YAML format
+      #   job = File.read('job.yml')
+      #   job_submit('example', job, 'yaml')
       def job_submit(organization, job, type)
         uri = server_uri("/organizations/#{organization}/jobs")
         case type
@@ -33,6 +43,11 @@ module Cyclid
       end
 
       # Get details of a job
+      # @param organization [String] Organization name.
+      # @param jobid [Integer] Job ID to retrieve. The ID must be a valid job for the organization.
+      # @return [Hash] Decoded server response object.
+      # @see #job_status
+      # @see #job_log
       def job_get(organization, jobid)
         uri = server_uri("/organizations/#{organization}/jobs/#{jobid}")
         res_data = signed_get(uri)
@@ -42,6 +57,11 @@ module Cyclid
       end
 
       # Get a job status
+      # @param organization [String] Organization name.
+      # @param jobid [Integer] Job ID to retrieve. The ID must be a valid job for the organization.
+      # @return [Hash] Decoded server response object.
+      # @see #job_get
+      # @see #job_log
       def job_status(organization, jobid)
         uri = server_uri("/organizations/#{organization}/jobs/#{jobid}/status")
         res_data = signed_get(uri)
@@ -51,6 +71,11 @@ module Cyclid
       end
 
       # Get a job log
+      # @param organization [String] Organization name.
+      # @param jobid [Integer] Job ID to retrieve. The ID must be a valid job for the organization.
+      # @return [Hash] Decoded server response object.
+      # @see #job_get
+      # @see #job_status
       def job_log(organization, jobid)
         uri = server_uri("/organizations/#{organization}/jobs/#{jobid}/log")
         res_data = signed_get(uri)

@@ -19,6 +19,7 @@ module Cyclid
     # User related methods
     module User
       # Retrieve the list of users from a server
+      # @return [Array] List of user names.
       def user_list
         uri = server_uri('/users')
         res_data = signed_get(uri)
@@ -33,6 +34,8 @@ module Cyclid
       end
 
       # Get details of a specific user
+      # @param username [String] User name of the user to retrieve.
+      # @return [Hash] Decoded server response object.
       def user_get(username)
         uri = server_uri("/users/#{username}")
         res_data = signed_get(uri)
@@ -42,6 +45,13 @@ module Cyclid
       end
 
       # Create a new user
+      # @param username [String] User name of the new user.
+      # @param email [String] Users email address.
+      # @param password [String] Unencrypted initial password
+      # @param secret [String] Initial HMAC signing secret
+      # @return [Hash] Decoded server response object.
+      # @see #user_modify
+      # @see #user_delete
       def user_add(username, email, password = nil, secret = nil)
         # Create the user object
         user = { 'username' => username, 'email' => email }
@@ -63,6 +73,18 @@ module Cyclid
       end
 
       # Modify a user
+      # @param username [String] User name of the new user.
+      # @param args [Hash] options to modify the user.
+      # @option args [String] email Users email address.
+      # @option args [String] secret Initial HMAC signing secret
+      # @option args [String] password Unencrypted initial password
+      # @return [Hash] Decoded server response object.
+      # @see #user_add
+      # @see #user_delete
+      # @example Change the email address of the user 'leslie'
+      #   user_modify('leslie', email: 'leslie@example.com')
+      # @example Change the password & screte of the user 'bob'
+      #   user_modify('bob', secret: 'sekrit', password: 'm1lkb0ne')
       def user_modify(username, args)
         # Create the user object
         user = {}
@@ -88,6 +110,10 @@ module Cyclid
       end
 
       # Delete a user
+      # @param username [String] User name of the user to delete.
+      # @return [Hash] Decoded server response object.
+      # @see #user_add
+      # @see #user_modify
       def user_delete(username)
         uri = server_uri("/users/#{username}")
         res_data = signed_delete(uri)

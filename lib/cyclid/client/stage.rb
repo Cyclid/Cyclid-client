@@ -17,6 +17,9 @@ module Cyclid
     # Stage related methods
     module Stage
       # Retrieve the list of stages from a server
+      # @param organization [String] Organization name.
+      # @return [Array] The list of stages. Each entry is a hash with the name
+      #   & version of the stage.
       def stage_list(organization)
         uri = server_uri("/organizations/#{organization}/stages")
         res_data = signed_get(uri)
@@ -31,6 +34,9 @@ module Cyclid
       end
 
       # Get details of a stage
+      # @param organization [String] Organization name.
+      # @param name [String] Name of the stage to retrieve.
+      # @return [Hash] Decoded server response object.
       def stage_get(organization, name)
         uri = server_uri("/organizations/#{organization}/stages/#{name}")
         res_data = signed_get(uri)
@@ -40,6 +46,13 @@ module Cyclid
       end
 
       # Create a stage
+      # @param organization [String] Organization name.
+      # @param stage [String] Raw stage definition, in JSON format.
+      # @return [Hash] Decoded server response object.
+      # @see #stage_modify
+      # @example Create a new stage from a file
+      #   stage = File.read('stage.json')
+      #   stage_create('example, stage)
       def stage_create(organization, stage)
         uri = server_uri("/organizations/#{organization}/stages")
         res_data = signed_json_post(uri, stage)
@@ -48,8 +61,12 @@ module Cyclid
         return res_data
       end
 
-      # Modify a stage. Stages are actually immutable; this actually creates a
-      # new version of a stage.
+      # Modify a stage.
+      # @note Stages are immutable; this actually creates a new version of an existing stage.
+      # @param organization [String] Organization name.
+      # @param stage [String] Raw stage definition, in JSON format.
+      # @return [Hash] Decoded server response object.
+      # @see #stage_create
       def stage_modify(organization, stage)
         uri = server_uri("/organizations/#{organization}/stages")
         res_data = signed_json_post(uri, stage)
