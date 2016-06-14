@@ -28,13 +28,27 @@ require 'cyclid/client/job'
 require 'cyclid/client/stage'
 
 module Cyclid
+  # Cyclid client methods
   module Client
+    # Tilapia is the standard Cyclid Ruby client. It provides an inteligent
+    # programmable API on top of the standard Cyclid REST API, complete with
+    # automatic signing of HTTP requests and HTTP error handling.
+    #
+    # The client provides interfaces for managing Users, Organizations, Stages
+    # & Jobs. Refer to the documentation for those modules for more information.
+    #
     # In case you're wondering, this class required a name: it couldn't be
     # 'Cyclid' and it couldn't be 'Client'. Tilapia are a common type of
     # Cichlid...
     class Tilapia
       attr_reader :config, :logger
+      # @!attribute [r] config
+      #   @return [Config] Client configuration object
+      # @!attribute [r] logger
+      #   @return [Logger] Client logger object
 
+      # @param config_path [String] Fully qualified path to the configuration file
+      # @param log_level [FixNum] Logger output level
       def initialize(config_path, log_level = Logger::FATAL)
         @config = Config.new(config_path)
 

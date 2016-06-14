@@ -17,6 +17,7 @@ module Cyclid
     # Organization related methods
     module Organization
       # Retrieve the list of organizations from a server
+      # @return [Array] List of organization names.
       def org_list
         uri = server_uri('/organizations')
         res_data = signed_get(uri)
@@ -31,6 +32,8 @@ module Cyclid
       end
 
       # Get details of a specific organization
+      # @param name [String] organization name.
+      # @return [Hash] Decoded server response object.
       def org_get(name)
         uri = server_uri("/organizations/#{name}")
         res_data = signed_get(uri)
@@ -39,7 +42,16 @@ module Cyclid
         return res_data
       end
 
-      # Create a new organization
+      # Create a new organization. The organization is created without any
+      # members; use org_modify to add a set of users to the organization
+      # after it has been created.
+      #
+      # @param name [String] organization name.
+      # @param email [String] organization owners email address.
+      # @return [Hash] Decoded server response object.
+      # @example Create a new organization 'example'
+      #   new_org = org_add('example', 'admin@example.com')
+      # @see #org_modify
       def org_add(name, email)
         # Create the organization object
         org = { 'name' => name, 'owner_email' => email }
@@ -53,7 +65,19 @@ module Cyclid
         return res_data
       end
 
-      # Modify an organization
+      # Modify an organization. Only the owner email address and organization
+      # members can be changed; you can not change the name of an organization
+      # once it has been created.
+      #
+      # @note Setting the organization members will *overwrite* the existing
+      #   set; you should ensure the set of members is complete before you set it.
+      # @param name [String] organization name.
+      # @param args [Hash] options to modify the organization.
+      # @option args [String] owner_email Organization owners email address.
+      # @option args [Array] members Set of users who will be organization members.
+      # @return [Hash] Decoded server response object.
+      # @see #org_add
+      # @see #org_delete
       def org_modify(name, args)
         # Create the organization object
         org = {}
@@ -77,6 +101,10 @@ module Cyclid
       end
 
       # Get details of an organization member
+      # @param name [String] organization name.
+      # @param username [String] member username.
+      # @return [Hash] Decoded server response object.
+      # @see User#user_get
       def org_user_get(name, username)
         uri = server_uri("/organizations/#{name}/members/#{username}")
         res_data = signed_get(uri)
@@ -86,6 +114,17 @@ module Cyclid
       end
 
       # Modify the permissions for an organization member
+      # @param name [String] organization name.
+      # @param username [String] member username.
+      # @param permissions [Hash] permissions to apply to the member.
+      # @option permissions [Boolean] admin organization 'admin' permission.
+      # @option permissions [Boolean] write organization 'write' permission.
+      # @option permissions [Boolean] read organization 'read' permission.
+      # @return [Hash] Decoded server response object.
+      # @see #org_modify
+      # @example Give the user 'leslie' read & write permission to the 'example' organization
+      #   perms = {admin: false, write: true, read: true}
+      #   org_user_permissions('example', 'leslie', perms)
       def org_user_permissions(name, username, permissions)
         perms = { 'permissions' => permissions }
 
@@ -98,7 +137,14 @@ module Cyclid
         return res_data
       end
 
-      # Get an organization configuration for a plugin
+      # Get a plugin configuration for an organization.
+      # @param name [String] organization name.
+      # @param type [String] plugin 'type'
+      # @param plugin [String] plugin name.
+      # @return [Hash] Decoded server response object.
+      # @see #org_config_set
+      # @example Get the plugin config & schema for the 'foo' 'api' type plugin, for the 'example' organization
+      #   org_config_get('example', 'api', 'foo')
       def org_config_get(name, type, plugin)
         uri = server_uri("/organizations/#{name}/configs/#{type}/#{plugin}")
         res_data = signed_get(uri)
@@ -107,7 +153,13 @@ module Cyclid
         return res_data
       end
 
-      # Update an organization configuration for a plugin
+      # Update a plugin configuration for an organization.
+      # @param name [String] organization name.
+      # @param type [String] plugin 'type'
+      # @param plugin [String] plugin name.
+      # @param config [Hash] plugin configuration data.
+      # @return [Hash] Decoded server response object.
+      # @see #org_config_get
       def org_config_set(name, type, plugin, config)
         uri = server_uri("/organizations/#{name}/configs/#{type}/#{plugin}")
         res_data = signed_json_put(uri, config)
@@ -117,6 +169,11 @@ module Cyclid
       end
 
       # Delete an organization
+      # @note The API does not currently support deleting an organization and
+      #   this method will always fail.
+      # @param name [String] organization name.
+      # @return [Hash] Decoded server response object.
+      # @see #org_add
       def org_delete(name)
         uri = server_uri("/organizations/#{name}")
         res_data = signed_delete(uri)

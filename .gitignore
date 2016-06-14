@@ -4,6 +4,8 @@ vendor
 *.swp
 coverage
 pkg
+.yardoc
+doc
 
 # OS artifacts
 .DS_Store
