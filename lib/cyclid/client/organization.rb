@@ -20,7 +20,7 @@ module Cyclid
       # @return [Array] List of organization names.
       def org_list
         uri = server_uri('/organizations')
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         orgs = []
@@ -36,7 +36,7 @@ module Cyclid
       # @return [Hash] Decoded server response object.
       def org_get(name)
         uri = server_uri("/organizations/#{name}")
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         return res_data
@@ -59,7 +59,7 @@ module Cyclid
 
         # Sign & send the request
         uri = server_uri('/organizations')
-        res_data = signed_json_post(uri, org)
+        res_data = api_json_post(uri, org)
         @logger.debug res_data
 
         return res_data
@@ -94,7 +94,7 @@ module Cyclid
 
         # Sign & send the request
         uri = server_uri("/organizations/#{name}")
-        res_data = signed_json_put(uri, org)
+        res_data = api_json_put(uri, org)
         @logger.debug res_data
 
         return res_data
@@ -107,7 +107,7 @@ module Cyclid
       # @see User#user_get
       def org_user_get(name, username)
         uri = server_uri("/organizations/#{name}/members/#{username}")
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         return res_data
@@ -131,7 +131,7 @@ module Cyclid
         @logger.debug perms
 
         uri = server_uri("/organizations/#{name}/members/#{username}")
-        res_data = signed_json_put(uri, perms)
+        res_data = api_json_put(uri, perms)
         @logger.debug res_data
 
         return res_data
@@ -147,7 +147,7 @@ module Cyclid
       #   org_config_get('example', 'api', 'foo')
       def org_config_get(name, type, plugin)
         uri = server_uri("/organizations/#{name}/configs/#{type}/#{plugin}")
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         return res_data
@@ -162,7 +162,7 @@ module Cyclid
       # @see #org_config_get
       def org_config_set(name, type, plugin, config)
         uri = server_uri("/organizations/#{name}/configs/#{type}/#{plugin}")
-        res_data = signed_json_put(uri, config)
+        res_data = api_json_put(uri, config)
         @logger.debug res_data
 
         return res_data
@@ -176,7 +176,7 @@ module Cyclid
       # @see #org_add
       def org_delete(name)
         uri = server_uri("/organizations/#{name}")
-        res_data = signed_delete(uri)
+        res_data = api_delete(uri)
         @logger.debug res_data
 
         return res_data

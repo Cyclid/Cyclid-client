@@ -26,7 +26,7 @@ module Cyclid
         include Http
 
         # Sign & perform a GET request
-        def get(uri)
+        def api_get(uri)
           req = sign_request(Net::HTTP::Get.new(uri), uri)
 
           http = Net::HTTP.new(uri.hostname, uri.port)
@@ -36,7 +36,7 @@ module Cyclid
         end
 
         # Sign & perform a POST request with a pre-formatted body
-        def raw_post(uri, data, content_type)
+        def api_raw_post(uri, data, content_type)
           unsigned = Net::HTTP::Post.new(uri)
           unsigned.content_type = content_type
           unsigned.body = data
@@ -50,19 +50,19 @@ module Cyclid
         end
 
         # Sign & perform a POST request with a JSON body
-        def json_post(uri, data)
+        def api_json_post(uri, data)
           json = Oj.dump(data)
-          raw_post(uri, json, 'application/json')
+          api_raw_post(uri, json, 'application/json')
         end
 
         # Sign & perform a POST request with a YAML body
-        def yaml_post(uri, data)
+        def api_yaml_post(uri, data)
           yaml = YAML.dump(data)
-          raw_post(uri, yaml, 'application/x-yaml')
+          api_raw_post(uri, yaml, 'application/x-yaml')
         end
 
         # Sign & perform a PUT request with a JSON body
-        def json_put(uri, data)
+        def api_json_put(uri, data)
           unsigned = Net::HTTP::Put.new(uri)
           unsigned.content_type = 'application/json'
           unsigned.body = Oj.dump(data)
@@ -76,7 +76,7 @@ module Cyclid
         end
 
         # Sign & perform a DELETE request
-        def delete(uri)
+        def api_delete(uri)
           req = sign_request(Net::HTTP::Delete.new(uri), uri)
 
           http = Net::HTTP.new(uri.hostname, uri.port)

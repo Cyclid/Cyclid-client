@@ -67,7 +67,7 @@ module Cyclid
 
           begin
             # Create a Config from this file and display the details
-            config = Cyclid::Client::Config.new(fname)
+            config = Cyclid::Client::Config.new(path: fname)
 
             puts File.basename(fname).colorize(:cyan)
             uri = URI::HTTP.build(host: config.server, port: config.port)
@@ -100,7 +100,7 @@ module Cyclid
           abort 'Not a valid organization' unless File.file?(fname)
 
           begin
-            config = Cyclid::Client::Config.new(fname)
+            config = Cyclid::Client::Config.new(path: fname)
 
             raise if config.server.nil? or \
                      config.organization.nil? or \

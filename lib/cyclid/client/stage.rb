@@ -22,7 +22,7 @@ module Cyclid
       #   & version of the stage.
       def stage_list(organization)
         uri = server_uri("/organizations/#{organization}/stages")
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         stages = []
@@ -39,7 +39,7 @@ module Cyclid
       # @return [Hash] Decoded server response object.
       def stage_get(organization, name)
         uri = server_uri("/organizations/#{organization}/stages/#{name}")
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         return res_data
@@ -55,7 +55,7 @@ module Cyclid
       #   stage_create('example, stage)
       def stage_create(organization, stage)
         uri = server_uri("/organizations/#{organization}/stages")
-        res_data = signed_json_post(uri, stage)
+        res_data = api_json_post(uri, stage)
         @logger.debug res_data
 
         return res_data
@@ -69,7 +69,7 @@ module Cyclid
       # @see #stage_create
       def stage_modify(organization, stage)
         uri = server_uri("/organizations/#{organization}/stages")
-        res_data = signed_json_post(uri, stage)
+        res_data = api_json_post(uri, stage)
         @logger.debug res_data
 
         return res_data
