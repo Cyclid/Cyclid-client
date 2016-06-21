@@ -85,5 +85,7 @@ module Cyclid
         @api.send(method, *args, &block)
       end
     end
+
+    include AuthMethods
   end
 end
