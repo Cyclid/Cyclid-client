@@ -26,6 +26,7 @@ module Cyclid
         # Add the username & password to the request
         def authenticate_request(request, _uri)
           request.basic_auth(@config.username, @config.password)
+          return request
         end
       end
     end
