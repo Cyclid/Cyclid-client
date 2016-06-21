@@ -17,14 +17,15 @@ module Cyclid
     # Authentication related methods
     module Auth
       # Retrieve a JWT token from the server.
+      # @param username [String] User name of the user to retrieve a token for.
       # @param claims [Hash] additional JWT claims to append to the token.
       # @return [Hash] Decoded server response object.
       # @example Request a simple token
       #   token_data = token_get
       # @example Request a token with a CSRF injected into the claims
       #   token_data = token_get(csrf: 'abcdef0123456789')
-      def token_get(claims = {})
-        uri = server_uri('/token')
+      def token_get(username, claims = {})
+        uri = server_uri("/token/#{username}")
         res_data = api_json_post(uri, claims.to_json)
         @logger.debug res_data
 
