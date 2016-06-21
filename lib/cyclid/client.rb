@@ -25,6 +25,7 @@ require 'cyclid/client/user'
 require 'cyclid/client/organization'
 require 'cyclid/client/job'
 require 'cyclid/client/stage'
+require 'cyclid/client/auth'
 
 module Cyclid
   # Cyclid client methods
@@ -71,6 +72,7 @@ module Cyclid
       include Organization
       include Job
       include Stage
+      include Auth
 
       private
 
