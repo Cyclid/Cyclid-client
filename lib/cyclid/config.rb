@@ -24,11 +24,11 @@ module Cyclid
       #   @return [Fixnum] the authentication method. (Default is AUTH_HMAC)
       # @!attribute [r] server
       #   @return [String] the Cyclid server FQDN
-      # @!attribute [r] port 
+      # @!attribute [r] port
       #   @return [Integer] the Cyclid server port. (Default is 80)
       # @!attribute [r] organization
       #   @return [String] the Cyclid organization that this user is associated with.
-      # @!attribute [r] username 
+      # @!attribute [r] username
       #   @return [String] the Cyclid username
       # @!attribute [r] secret
       #   @return [String] the users HMAC signing secret
@@ -42,7 +42,7 @@ module Cyclid
       include AuthMethods
 
       # @param path [String] Fully qualified path to the configuration file
-      def initialize(options={})
+      def initialize(options = {})
         # Load the config if a path was provided
         @path = options[:path] || nil
         @config = @path.nil? ? nil : YAML.load_file(@path)
@@ -50,12 +50,12 @@ module Cyclid
         # Select the authentication type & associated authentication data.
         @auth = options[:auth] || AUTH_HMAC
         case @auth
-          when AUTH_HMAC
-            @secret = options[:secret] || @config['secret']
-          when AUTH_BASIC
-            @password = options[:password] || @config['password']
-          when AUTH_TOKEN
-            @token = options[:token] || @config['token']
+        when AUTH_HMAC
+          @secret = options[:secret] || @config['secret']
+        when AUTH_BASIC
+          @password = options[:password] || @config['password']
+        when AUTH_TOKEN
+          @token = options[:token] || @config['token']
         end
 
         # Set defaults from the options

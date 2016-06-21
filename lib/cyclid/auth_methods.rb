@@ -19,8 +19,6 @@ module Cyclid
       AUTH_HMAC = 1,
       AUTH_BASIC = 2,
       AUTH_TOKEN = 3
-
-      freeze
     end
   end
 end

@@ -100,7 +100,7 @@ module Cyclid
 
         # The API does not support non-authenticated requests, so this method
         # must be implemented.
-        def authenticate_request(request, uri)
+        def authenticate_request(_request, _uri)
           raise NotImplementedError
         end
       end
