@@ -60,16 +60,16 @@ module Cyclid
 
         # Set defaults from the options
         @server = options[:server] || nil
+        @port = options[:port] || nil
         @organization = options[:organization] || nil
         @username = options[:username] || nil
 
         # Get anything provided in the config file
         if @config
           @server ||= @config['server']
+          @port ||= @config['port'] || 80
           @organization ||= @config['organization']
           @username ||= @config['username']
-          # Port is handled as a special case so that the fallback is sensible
-          @port = @config['port'] || (options[:port] || 80)
         end
 
         # Server & Username *must* be set
