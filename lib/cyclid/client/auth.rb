@@ -26,7 +26,7 @@ module Cyclid
       #   token_data = token_get(csrf: 'abcdef0123456789')
       def token_get(username, claims = {})
         uri = server_uri("/token/#{username}")
-        res_data = api_json_post(uri, claims.to_json)
+        res_data = api_json_post(uri, claims)
         @logger.debug res_data
 
         return res_data
