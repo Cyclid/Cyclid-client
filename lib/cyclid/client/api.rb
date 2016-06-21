@@ -22,6 +22,11 @@ module Cyclid
     module Api
       # Base class for API request implementations
       class Base
+        def initialize(config, logger)
+          @config = config
+          @logger = logger
+        end
+
         # Add authentication details & perform a GET request
         def api_get(uri)
           req = authenticate_request(Net::HTTP::Get.new(uri), uri)

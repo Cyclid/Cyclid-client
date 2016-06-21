@@ -57,11 +57,11 @@ module Cyclid
         # Select the API methods to use
         @api = case @config.auth
                  when AuthMethods::AUTH_HMAC
-                   Api::Hmac.new(@config)
+                   Api::Hmac.new(@config, @logger)
                  when AuthMethods::AUTH_BASIC
-                   Api::Basic.new(@config)
+                   Api::Basic.new(@config, @logger)
                  when AuthMethods::AUTH_TOKEN
-                   Api::Token.new(@config)
+                   Api::Token.new(@config, @logger)
                  end
       end
 

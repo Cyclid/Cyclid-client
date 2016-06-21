@@ -21,10 +21,6 @@ module Cyclid
     module Api
       # HMAC signed HTTP methods
       class Hmac < Base
-        def initialize(config)
-          @config = config
-        end
-
         # Sign the request with HMAC
         def authenticate_request(request, uri)
           signer = Cyclid::HMAC::Signer.new

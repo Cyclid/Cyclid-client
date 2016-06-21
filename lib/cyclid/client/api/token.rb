@@ -19,10 +19,6 @@ module Cyclid
     module Api
       # JWT token based HTTP methods
       class Token < Base
-        def initialize(config)
-          @config = config
-        end
-
         # Add the token to the request
         def authenticate_request(request, _uri)
           request.add_field("Authorization", "Token #{@config.token}")

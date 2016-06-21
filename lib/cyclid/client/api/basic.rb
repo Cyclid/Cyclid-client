@@ -19,10 +19,6 @@ module Cyclid
     module Api
       # HTTP Basic auth HTTP methods
       class Basic < Base
-        def initialize(config)
-          @config = config
-        end
-
         # Add the username & password to the request
         def authenticate_request(request, _uri)
           request.basic_auth(@config.username, @config.password)
