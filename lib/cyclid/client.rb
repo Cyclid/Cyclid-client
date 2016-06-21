@@ -20,7 +20,7 @@ require 'logger'
 require 'cyclid/config'
 require 'cyclid/hmac'
 
-require 'cyclid/client/http'
+require 'cyclid/client/api'
 require 'cyclid/client/user'
 require 'cyclid/client/organization'
 require 'cyclid/client/job'
@@ -54,7 +54,7 @@ module Cyclid
         @logger = Logger.new(STDERR)
         @logger.level = log_level
 
-        @api = Http::HMAC.new(@config)
+        @api = Api::Hmac.new(@config)
       end
 
       include User
@@ -64,7 +64,12 @@ module Cyclid
 
       private
 
-      include Http
+      # Build a URI for the configured server & required resource
+      def server_uri(path)
+        URI::HTTP.build(host: @config.server,
+                        port: @config.port,
+                        path: path)
+      end
 
       def method_missing(method, *args, &block)
         @api.send(method, *args, &block)
