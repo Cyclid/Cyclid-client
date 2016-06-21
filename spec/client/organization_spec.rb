@@ -4,7 +4,7 @@ require 'client_helper'
 describe Cyclid::Client::Organization do
   context 'retrieving organization information' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'returns a list of organizations' do
@@ -44,7 +44,7 @@ describe Cyclid::Client::Organization do
 
   context 'creating organizations' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'creates a new organization' do
@@ -67,7 +67,7 @@ describe Cyclid::Client::Organization do
 
   context 'modifying an organization' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'changes the owner_email' do
@@ -151,7 +151,7 @@ describe Cyclid::Client::Organization do
 
   context 'deleting an organization' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'deletes an organization' do
@@ -173,7 +173,7 @@ describe Cyclid::Client::Organization do
 
   context 'retrieving organization member information' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'returns details of an organization member' do
@@ -195,7 +195,7 @@ describe Cyclid::Client::Organization do
 
   context 'changing a users permissions' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'modifies a users permissions' do
@@ -221,7 +221,7 @@ describe Cyclid::Client::Organization do
 
   context 'retrieving an organization plugin configuration' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'returns a plugin configuration for an organization' do
@@ -243,7 +243,7 @@ describe Cyclid::Client::Organization do
 
   context 'updating an organization plugin configuration' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'updates a configuration' do

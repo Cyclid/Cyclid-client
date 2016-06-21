@@ -3,7 +3,7 @@ require 'client_helper'
 describe Cyclid::Client::Job do
   context 'retrieving job information' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'returns a job for a valid organization and id' do
@@ -57,7 +57,7 @@ describe Cyclid::Client::Job do
 
   context 'submitting a new job' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'submits a JSON job to a valid organization' do

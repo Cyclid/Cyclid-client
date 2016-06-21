@@ -48,9 +48,11 @@ module Cyclid
 
       # @param config_path [String] Fully qualified path to the configuration file
       # @param log_level [FixNum] Logger output level
-      def initialize(config_path, log_level = Logger::FATAL)
-        @config = Config.new(path: config_path)
+      def initialize(options)
+        @config = Config.new(options)
 
+        # Create a logger
+        log_level = options[:log_level] || Logger::FATAL
         @logger = Logger.new(STDERR)
         @logger.level = log_level
 

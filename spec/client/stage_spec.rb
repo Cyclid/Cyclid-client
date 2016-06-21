@@ -3,7 +3,7 @@ require 'client_helper'
 describe Cyclid::Client::Stage do
   context 'retrieving stage information' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'returns a list of stages' do
@@ -43,7 +43,7 @@ describe Cyclid::Client::Stage do
 
   context 'creating stages' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'creates a new stage' do
@@ -68,7 +68,7 @@ describe Cyclid::Client::Stage do
 
   context 'modifying a stage' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'modifies the stage' do

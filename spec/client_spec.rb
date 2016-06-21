@@ -5,7 +5,7 @@ describe Cyclid::Client::Tilapia do
   context 'initialising a client' do
     it 'creates a new client with a valid configuration path' do
       client = nil
-      expect{ client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG']) }.to_not raise_error
+      expect{ client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG']) }.to_not raise_error
       expect(client.config).to be_an_instance_of(Cyclid::Client::Config)
       expect(client.logger).to be_an_instance_of(Logger)
       expect(client.logger.level).to eq(Logger::FATAL)
@@ -13,12 +13,12 @@ describe Cyclid::Client::Tilapia do
 
     it 'creates a new client with a non-default log level' do
       client = nil
-      expect{ client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'], Logger::DEBUG) }.to_not raise_error
+      expect{ client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'], log_level: Logger::DEBUG) }.to_not raise_error
       expect(client.logger.level).to eq(Logger::DEBUG)
     end
 
     it 'aborts if the configuration path is invalid' do
-      expect{ Cyclid::Client::Tilapia.new('/does/not/exist') }.to raise_error
+      expect{ Cyclid::Client::Tilapia.new(path: '/does/not/exist') }.to raise_error
     end
   end
 
@@ -29,12 +29,12 @@ describe Cyclid::Client::Tilapia do
     end
 
     it 'creates a valid URI' do
-      client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
       expect(client.server_uri('/example/test')).to eq(URI('http://localhost:9999/example/test'))
     end
 
     it 'signs a GET request with HMAC' do
-      client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
       uri = client.server_uri('/example/test')
       request = Net::HTTP::Get.new(uri)
 
@@ -46,7 +46,7 @@ describe Cyclid::Client::Tilapia do
     end
 
     it 'signs a POST request with HMAC' do
-      client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
       uri = client.server_uri('/example/test')
       request = Net::HTTP::Post.new(uri)
 
@@ -58,7 +58,7 @@ describe Cyclid::Client::Tilapia do
     end
 
     it 'signs a PUT request with HMAC' do
-      client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
       uri = client.server_uri('/example/test')
       request = Net::HTTP::Put.new(uri)
 
@@ -70,7 +70,7 @@ describe Cyclid::Client::Tilapia do
     end
 
     it 'signs a DELETE request with HMAC' do
-      client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
       uri = client.server_uri('/example/test')
       request = Net::HTTP::Delete.new(uri)
 
@@ -82,7 +82,7 @@ describe Cyclid::Client::Tilapia do
     end
 
     it 'rejects non-GET/PUT/POST/DELETE requests' do
-      client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
       uri = client.server_uri('/example/test')
       request = Net::HTTP::Patch.new(uri)
 
@@ -95,7 +95,7 @@ describe Cyclid::Client::Tilapia do
       # Expose the private methods
       Cyclid::Client::Tilapia.send(:public, *Cyclid::Client::Tilapia.private_instance_methods)
 
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
       @uri = @client.server_uri('/example/test')
     end
 
@@ -183,7 +183,7 @@ describe Cyclid::Client::Tilapia do
       # Expose the private methods
       Cyclid::Client::Tilapia.send(:public, *Cyclid::Client::Tilapia.private_instance_methods)
 
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
       @uri = @client.server_uri('/example/test')
     end
 

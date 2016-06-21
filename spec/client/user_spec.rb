@@ -3,7 +3,7 @@ require 'client_helper'
 describe Cyclid::Client::User do
   context 'retrieving organization information' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'returns a list of users' do
@@ -43,7 +43,7 @@ describe Cyclid::Client::User do
 
   context 'creating users' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'creates a new user without a password or secret specified' do
@@ -100,7 +100,7 @@ describe Cyclid::Client::User do
 
   context 'modifying users' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'changes the users email address' do
@@ -163,7 +163,7 @@ describe Cyclid::Client::User do
 
   context 'deleting users' do
     before :all do
-      @client = Cyclid::Client::Tilapia.new(ENV['TEST_CONFIG'])
+      @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
     end
 
     it 'deletes a user' do

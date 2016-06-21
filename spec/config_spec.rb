@@ -3,7 +3,7 @@ require 'client_helper'
 describe Cyclid::Client::Config do
   it 'loads a valid configuration' do
     config = nil
-    expect{ config = Cyclid::Client::Config.new(path: ENV['TEST_CONFIG']) }.to_not raise_error
+    expect{ config = Cyclid::Client::Config.new(path:ENV['TEST_CONFIG']) }.to_not raise_error
     expect(config.path).to eq(ENV['TEST_CONFIG'])
   end
 
@@ -16,7 +16,7 @@ describe Cyclid::Client::Config do
     allow(YAML).to receive(:load_file).and_return(test_config)
 
     config = nil
-    expect{ config = Cyclid::Client::Config.new(path: ENV['TEST_CONFIG']) }.to_not raise_error
+    expect{ config = Cyclid::Client::Config.new(path:ENV['TEST_CONFIG']) }.to_not raise_error
     expect(config.server).to eq(test_config['server'])
     expect(config.port).to eq(80)
     expect(config.organization).to eq(test_config['organization'])
@@ -34,7 +34,7 @@ describe Cyclid::Client::Config do
     allow(YAML).to receive(:load_file).and_return(test_config)
 
     config = nil
-    expect{ config = Cyclid::Client::Config.new(path: ENV['TEST_CONFIG']) }.to_not raise_error
+    expect{ config = Cyclid::Client::Config.new(path:ENV['TEST_CONFIG']) }.to_not raise_error
     expect(config.server).to eq(test_config['server'])
     expect(config.port).to eq(test_config['port'])
     expect(config.organization).to eq(test_config['organization'])
@@ -45,10 +45,10 @@ describe Cyclid::Client::Config do
   it 'fails gracefully if the configuration file is invalid' do
     allow(YAML).to receive(:load_file).and_return(nil)
 
-    expect{ Cyclid::Client::Config.new(path: ENV['TEST_CONFIG']) }.to raise_error
+    expect{ Cyclid::Client::Config.new(path:ENV['TEST_CONFIG']) }.to raise_error
   end
 
   it 'fails gracefully if the configuration file can not be loaded' do
-    expect{ Cyclid::Client::Config.new(path: '/invalid/config/file/path') }.to raise_error
+    expect{ Cyclid::Client::Config.new(path:'/invalid/config/file/path') }.to raise_error
   end
 end

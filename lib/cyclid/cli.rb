@@ -23,7 +23,7 @@ class Thor
   private
 
   def client
-    @client ||= Cyclid::Client::Tilapia.new(options[:config], debug?)
+    @client ||= Cyclid::Client::Tilapia.new(path: options[:config], log_level: debug?)
   end
 
   def debug?
