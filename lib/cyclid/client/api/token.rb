@@ -22,6 +22,7 @@ module Cyclid
         # Add the token to the request
         def authenticate_request(request, _uri)
           request.add_field("Authorization", "Token #{@config.token}")
+          return request
         end
       end
     end
