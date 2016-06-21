@@ -18,7 +18,7 @@ require 'yaml'
 require 'logger'
 
 require 'cyclid/config'
-require 'cyclid/hmac'
+require 'cyclid/auth_methods'
 
 require 'cyclid/client/api'
 require 'cyclid/client/user'
@@ -54,7 +54,15 @@ module Cyclid
         @logger = Logger.new(STDERR)
         @logger.level = log_level
 
-        @api = Api::Hmac.new(@config)
+        # Select the API methods to use
+        @api = case @config.auth
+                 when AuthMethods::AUTH_HMAC
+                   Api::Hmac.new(@config)
+                 when AuthMethods::AUTH_BASIC
+                   Api::Basic.new(@config)
+                 when AuthMethods::AUTH_TOKEN
+                   Api::Token.new(@config)
+                 end
       end
 
       include User
