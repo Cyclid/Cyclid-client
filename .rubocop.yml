@@ -1,6 +1,7 @@
 AllCops:
   Exclude:
     - 'vendor/**/*'
+    - 'lib/cyclid/auth_methods.rb'
 
 LineLength:
   Max: 100

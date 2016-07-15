@@ -1,7 +1,7 @@
 # rubocop:disable Metrics/LineLength
 Gem::Specification.new do |s|
   s.name        = 'cyclid-client'
-  s.version     = '0.2.0'
+  s.version     = '0.3.0'
   s.licenses    = ['Apache-2.0']
   s.summary     = 'Cyclid command line client & library'
   s.description = 'Cyclid command line client for interacting with a Cyclid server and the Ruby client library.'

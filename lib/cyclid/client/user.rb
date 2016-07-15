@@ -22,7 +22,7 @@ module Cyclid
       # @return [Array] List of user names.
       def user_list
         uri = server_uri('/users')
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         users = []
@@ -38,7 +38,7 @@ module Cyclid
       # @return [Hash] Decoded server response object.
       def user_get(username)
         uri = server_uri("/users/#{username}")
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         return res_data
@@ -66,7 +66,7 @@ module Cyclid
 
         # Sign & send the request
         uri = server_uri('/users')
-        res_data = signed_json_post(uri, user)
+        res_data = api_json_post(uri, user)
         @logger.debug res_data
 
         return res_data
@@ -103,7 +103,7 @@ module Cyclid
 
         # Sign & send the request
         uri = server_uri("/users/#{username}")
-        res_data = signed_json_put(uri, user)
+        res_data = api_json_put(uri, user)
         @logger.debug res_data
 
         return res_data
@@ -116,7 +116,7 @@ module Cyclid
       # @see #user_modify
       def user_delete(username)
         uri = server_uri("/users/#{username}")
-        res_data = signed_delete(uri)
+        res_data = api_delete(uri)
         @logger.debug res_data
 
         return res_data

@@ -31,9 +31,9 @@ module Cyclid
         uri = server_uri("/organizations/#{organization}/jobs")
         case type
         when 'yaml'
-          res_data = signed_raw_post(uri, job, 'application/x-yaml')
+          res_data = api_raw_post(uri, job, 'application/x-yaml')
         when 'json'
-          res_data = signed_raw_post(uri, job, 'application/json')
+          res_data = api_raw_post(uri, job, 'application/json')
         else
           raise "Unknown job format #{type}"
         end
@@ -50,7 +50,7 @@ module Cyclid
       # @see #job_log
       def job_get(organization, jobid)
         uri = server_uri("/organizations/#{organization}/jobs/#{jobid}")
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         return res_data
@@ -64,7 +64,7 @@ module Cyclid
       # @see #job_log
       def job_status(organization, jobid)
         uri = server_uri("/organizations/#{organization}/jobs/#{jobid}/status")
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         return res_data
@@ -78,7 +78,7 @@ module Cyclid
       # @see #job_status
       def job_log(organization, jobid)
         uri = server_uri("/organizations/#{organization}/jobs/#{jobid}/log")
-        res_data = signed_get(uri)
+        res_data = api_get(uri)
         @logger.debug res_data
 
         return res_data
