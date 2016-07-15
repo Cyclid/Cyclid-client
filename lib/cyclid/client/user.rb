@@ -46,15 +46,19 @@ module Cyclid
 
       # Create a new user
       # @param username [String] User name of the new user.
+      # @param name [String] Users real name.
       # @param email [String] Users email address.
       # @param password [String] Unencrypted initial password
       # @param secret [String] Initial HMAC signing secret
       # @return [Hash] Decoded server response object.
       # @see #user_modify
       # @see #user_delete
-      def user_add(username, email, password = nil, secret = nil)
+      def user_add(username, email, name = nil, password = nil, secret = nil)
         # Create the user object
         user = { 'username' => username, 'email' => email }
+
+        # Add the real name is one was supplied
+        user['name'] = name unless name.nil?
 
         # Add the HMAC secret if one was supplied
         user['secret'] = secret unless secret.nil?
@@ -75,6 +79,7 @@ module Cyclid
       # Modify a user
       # @param username [String] User name of the new user.
       # @param args [Hash] options to modify the user.
+      # @option args [String] name Users real name.
       # @option args [String] email Users email address.
       # @option args [String] secret Initial HMAC signing secret
       # @option args [String] password Unencrypted initial password
@@ -88,6 +93,9 @@ module Cyclid
       def user_modify(username, args)
         # Create the user object
         user = {}
+
+        # Add the real name is one was supplied
+        user['name'] = args[:name] if args.key? :name and args[:name]
 
         # Add the email address if one was supplied
         user['email'] = args[:email] if args.key? :email and args[:email]

@@ -25,6 +25,7 @@ module Cyclid
 
         # Pretty print the user details
         puts 'Username: '.colorize(:cyan) + user['username']
+        puts 'Name: '.colorize(:cyan) + (user['name'] || '')
         puts 'Email: '.colorize(:cyan) + user['email']
         puts 'Organizations'.colorize(:cyan)
         if user['organizations'].any?
