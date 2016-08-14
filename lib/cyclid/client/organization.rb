@@ -143,7 +143,8 @@ module Cyclid
       # @param plugin [String] plugin name.
       # @return [Hash] Decoded server response object.
       # @see #org_config_set
-      # @example Get the plugin config & schema for the 'foo' 'api' type plugin, for the 'example' organization
+      # @example Get the plugin config & schema for the 'foo' 'api' type plugin, for the 'example'
+      # organization
       #   org_config_get('example', 'api', 'foo')
       def org_config_get(name, type, plugin)
         uri = server_uri("/organizations/#{name}/configs/#{type}/#{plugin}")

@@ -40,7 +40,7 @@ module Cyclid
           nonce = SecureRandom.hex
           headers = signer.sign_request(uri.path,
                                         @config.secret,
-                                        auth_header_format: '%{auth_scheme} %{username}:%{signature}',
+                                        auth_header_format: '%{auth_scheme} %{username}:%{signature}', # rubocop:disable Metrics/LineLength
                                         username: @config.username,
                                         nonce: nonce,
                                         method: method)
