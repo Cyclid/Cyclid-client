@@ -76,7 +76,7 @@ describe Cyclid::Client::User do
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       res = {}
-      expect{ res = @client.user_add('bob', 'bob@example.com', nil, 'sekrit') }.to_not raise_error
+      expect{ res = @client.user_add('bob', 'bob@example.com', nil, nil, 'sekrit') }.to_not raise_error
       expect(res['test']).to eq('data')
     end
 
@@ -93,7 +93,7 @@ describe Cyclid::Client::User do
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       res = {}
-      expect{ res = @client.user_add('bob', 'bob@example.com', 'm1lkb0ne') }.to_not raise_error
+      expect{ res = @client.user_add('bob', 'bob@example.com', nil, 'm1lkb0ne') }.to_not raise_error
       expect(res['test']).to eq('data')
     end
   end
