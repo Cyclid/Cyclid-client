@@ -23,7 +23,8 @@ module Cyclid
       class Hmac < Base
         # Sign the request with HMAC
         def authenticate_request(request, uri)
-          signer = Cyclid::HMAC::Signer.new
+          algorithm = 'sha256'
+          signer = Cyclid::HMAC::Signer.new(algorithm)
 
           method = if request.is_a? Net::HTTP::Get
                      'GET'
@@ -48,6 +49,7 @@ module Cyclid
           headers[0].each do |k, v|
             request[k] = v
           end
+          request['X-HMAC-Algorithm'] = algorithm
 
           return request
         end
