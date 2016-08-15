@@ -76,7 +76,7 @@ module Cyclid
         # Get anything provided in the config file
         if @config
           @server ||= @config['server']
-          @port ||= @config['port'] || 80
+          @port ||= @config['port'] || 8361
           @organization ||= @config['organization']
           @username ||= @config['username']
         end
