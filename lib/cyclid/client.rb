@@ -47,8 +47,9 @@ module Cyclid
       # @!attribute [r] logger
       #   @return [Logger] Client logger object
 
-      # @param config_path [String] Fully qualified path to the configuration file
-      # @param log_level [FixNum] Logger output level
+      # @param [Hash] options
+      # @option options [String] :config_path Fully qualified path to the configuration file
+      # @option options [FixNum] :log_level Logger output level
       def initialize(options)
         @config = Config.new(options)
 
