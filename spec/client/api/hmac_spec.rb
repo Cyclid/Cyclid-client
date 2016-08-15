@@ -24,6 +24,7 @@ describe Cyclid::Client::Api::Hmac do
       api_request = nil
       expect{ api_request = subject.authenticate_request(request, uri) }.to_not raise_error
       expect(api_request.key?('x-hmac-nonce')).to be(true)
+      expect(api_request.key?('x-hmac-algorithm')).to be(true)
       expect(api_request.key?('authorization')).to be(true)
       expect(api_request.key?('date')).to be(true)
     end
@@ -34,6 +35,7 @@ describe Cyclid::Client::Api::Hmac do
       api_request = nil
       expect{ api_request = subject.authenticate_request(request, uri) }.to_not raise_error
       expect(api_request.key?('x-hmac-nonce')).to be(true)
+      expect(api_request.key?('x-hmac-algorithm')).to be(true)
       expect(api_request.key?('authorization')).to be(true)
       expect(api_request.key?('date')).to be(true)
     end
@@ -44,6 +46,7 @@ describe Cyclid::Client::Api::Hmac do
       api_request = nil
       expect{ api_request = subject.authenticate_request(request, uri) }.to_not raise_error
       expect(api_request.key?('x-hmac-nonce')).to be(true)
+      expect(api_request.key?('x-hmac-algorithm')).to be(true)
       expect(api_request.key?('authorization')).to be(true)
       expect(api_request.key?('date')).to be(true)
     end
@@ -54,6 +57,7 @@ describe Cyclid::Client::Api::Hmac do
       api_request = nil
       expect{ api_request = subject.authenticate_request(request, uri) }.to_not raise_error
       expect(api_request.key?('x-hmac-nonce')).to be(true)
+      expect(api_request.key?('x-hmac-algorithm')).to be(true)
       expect(api_request.key?('authorization')).to be(true)
       expect(api_request.key?('date')).to be(true)
     end
@@ -93,7 +97,8 @@ describe Cyclid::Client::Api::Hmac do
                          'Host' => 'example.com:9999',
                          'User-Agent' => 'Ruby',
                          'Date' => /.*/,
-                         'X-Hmac-Nonce' => /.*/ })
+                         'X-Hmac-Nonce' => /.*/,
+                         'X-Hmac-Algorithm' => /.*/ })
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       res = nil
@@ -111,7 +116,8 @@ describe Cyclid::Client::Api::Hmac do
                          'Host' => 'example.com:9999',
                          'User-Agent' => 'Ruby',
                          'Date' => /.*/,
-                         'X-Hmac-Nonce' => /.*/ })
+                         'X-Hmac-Nonce' => /.*/,
+                         'X-Hmac-Algorithm' => /.*/ })
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       expect{ subject.api_json_post(uri, 'test' => 'json') }.to_not raise_error
@@ -127,7 +133,8 @@ describe Cyclid::Client::Api::Hmac do
                          'Host' => 'example.com:9999',
                          'User-Agent' => 'Ruby',
                          'Date' => /.*/,
-                         'X-Hmac-Nonce' => /.*/ })
+                         'X-Hmac-Nonce' => /.*/,
+                         'X-Hmac-Algorithm' => /.*/ })
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       expect{ subject.api_yaml_post(uri, 'test' => 'yaml') }.to_not raise_error
@@ -143,7 +150,8 @@ describe Cyclid::Client::Api::Hmac do
                          'Host' => 'example.com:9999',
                          'User-Agent' => 'Ruby',
                          'Date' => /.*/,
-                         'X-Hmac-Nonce' => /.*/ })
+                         'X-Hmac-Nonce' => /.*/,
+                         'X-Hmac-Algorithm' => /.*/ })
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       expect{ subject.api_json_put(uri, 'test' => 'json') }.to_not raise_error
@@ -157,7 +165,8 @@ describe Cyclid::Client::Api::Hmac do
                          'Host' => 'example.com:9999',
                          'User-Agent' => 'Ruby',
                          'Date' => /.*/,
-                         'X-Hmac-Nonce' => /.*/ })
+                         'X-Hmac-Nonce' => /.*/,
+                         'X-Hmac-Algorithm' => /.*/ })
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       expect{ subject.api_delete(uri) }.to_not raise_error
