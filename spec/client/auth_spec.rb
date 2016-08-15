@@ -7,7 +7,7 @@ describe Cyclid::Client::Auth do
     end
 
     it 'retrieves an API token' do
-      stub_request(:post, "http://localhost:9999/token/test")
+      stub_request(:post, 'http://localhost:9999/token/test')
         .with(body: '"sekrit"',
               headers: { 'Accept' => '*/*',
                          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -16,9 +16,9 @@ describe Cyclid::Client::Auth do
                          'User-Agent' => 'Ruby',
                          'Date' => /.*/,
                          'X-Hmac-Nonce' => /.*/ })
-        .to_return(:status => 200, :body => '{}', :headers => {})
+        .to_return(status: 200, body: '{}', headers: {})
 
-      expect{ token = @client.token_get('test', 'sekrit') }.to_not raise_error
+      expect{ @client.token_get('test', 'sekrit') }.to_not raise_error
     end
   end
 end

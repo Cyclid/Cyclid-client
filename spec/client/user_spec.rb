@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 require 'client_helper'
 
 describe Cyclid::Client::User do

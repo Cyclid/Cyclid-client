@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 require 'client_helper'
 
 describe Cyclid::Client::Api::Hmac do
@@ -16,7 +15,7 @@ describe Cyclid::Client::Api::Hmac do
     end
 
     subject do
-      Cyclid::Client::Api::Hmac.new(config, Logger.new(STDERR)) 
+      Cyclid::Client::Api::Hmac.new(config, Logger.new(STDERR))
     end
 
     it 'signs a GET request' do

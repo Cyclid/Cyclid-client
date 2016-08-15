@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/LineLength
 require 'client_helper'
 
 describe Cyclid::Client::Api::Token do
@@ -16,7 +15,7 @@ describe Cyclid::Client::Api::Token do
     end
 
     subject do
-      Cyclid::Client::Api::Token.new(config, Logger.new(STDERR)) 
+      Cyclid::Client::Api::Token.new(config, Logger.new(STDERR))
     end
 
     it 'tokenizes a GET request' do
@@ -78,7 +77,7 @@ describe Cyclid::Client::Api::Token do
                          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
                          'Authorization' => 'Token test:sekrit',
                          'Host' => 'example.com:9999',
-                         'User-Agent' => 'Ruby'})
+                         'User-Agent' => 'Ruby' })
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       res = nil
@@ -94,7 +93,7 @@ describe Cyclid::Client::Api::Token do
                          'Authorization' => 'Token test:sekrit',
                          'Content-Type' => 'application/json',
                          'Host' => 'example.com:9999',
-                         'User-Agent' => 'Ruby'})
+                         'User-Agent' => 'Ruby' })
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       expect{ subject.api_json_post(uri, 'test' => 'json') }.to_not raise_error
@@ -108,7 +107,7 @@ describe Cyclid::Client::Api::Token do
                          'Authorization' => 'Token test:sekrit',
                          'Content-Type' => 'application/x-yaml',
                          'Host' => 'example.com:9999',
-                         'User-Agent' => 'Ruby'})
+                         'User-Agent' => 'Ruby' })
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       expect{ subject.api_yaml_post(uri, 'test' => 'yaml') }.to_not raise_error
@@ -122,7 +121,7 @@ describe Cyclid::Client::Api::Token do
                          'Authorization' => 'Token test:sekrit',
                          'Content-Type' => 'application/json',
                          'Host' => 'example.com:9999',
-                         'User-Agent' => 'Ruby'})
+                         'User-Agent' => 'Ruby' })
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       expect{ subject.api_json_put(uri, 'test' => 'json') }.to_not raise_error
@@ -133,7 +132,7 @@ describe Cyclid::Client::Api::Token do
         .with(headers: { 'Accept' => '*/*',
                          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
                          'Authorization' => 'Token test:sekrit',
-                         'User-Agent' => 'Ruby'})
+                         'User-Agent' => 'Ruby' })
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       expect{ subject.api_delete(uri) }.to_not raise_error

@@ -45,7 +45,7 @@ module Cyclid
       # @option options [String] :path Fully qualified path to the configuration file
       # @option options [FixNum] :auth Authentication method
       # @option options [String] :username Users username.
-      # @option options [String] :secret Users authentication secret for use with HMAC authentication.
+      # @option options [String] :secret Users secret for use with HMAC authentication.
       # @option options [String] :password Users password for use with HTTP Basic authentication.
       # @option options [String] :token Users API token for use with Token authentication.
       # @option options [String] :server API server address.
