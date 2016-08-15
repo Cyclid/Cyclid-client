@@ -18,7 +18,7 @@ describe Cyclid::Client::Config do
     config = nil
     expect{ config = Cyclid::Client::Config.new(path: ENV['TEST_CONFIG']) }.to_not raise_error
     expect(config.server).to eq(test_config['server'])
-    expect(config.port).to eq(80)
+    expect(config.port).to eq(8361)
     expect(config.organization).to eq(test_config['organization'])
     expect(config.username).to eq(test_config['username'])
     expect(config.secret).to eq(test_config['secret'])
