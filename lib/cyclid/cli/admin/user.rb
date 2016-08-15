@@ -32,6 +32,7 @@ module Cyclid
 
         # Pretty print the user details
         puts 'Username: '.colorize(:cyan) + user['username']
+        puts 'Name: '.colorize(:cyan) + (user['name'] || '')
         puts 'Email: '.colorize(:cyan) + user['email']
         puts 'Organizations:'.colorize(:cyan)
         if user['organizations'].any?
@@ -50,6 +51,8 @@ module Cyclid
         Create a user USERNAME with the email address EMAIL. The new user will not be a member of
         any organization.
 
+        The --name option sets the users real name.
+
         The --password option sets an encrypted password for HTTP Basic authentication and Cyclid
         UI console logins.
 
@@ -58,10 +61,11 @@ module Cyclid
         One of either --password or --secret should be used if you want the user to be able to
         authenticate with the server.
       LONGDESC
+      option :name, aliases: '-n'
       option :password, aliases: '-p'
       option :secret, aliases: '-s'
       def create(username, email)
-        client.user_add(username, email, options[:password], options[:secret])
+        client.user_add(username, email, options[:name], options[:password], options[:secret])
       rescue StandardError => ex
         abort "Failed to create new user: #{ex}"
       end
@@ -70,6 +74,8 @@ module Cyclid
       long_desc <<-LONGDESC
         Modify the user USERNAME.
 
+        The --name option sets the users real name.
+
         The --email option sets the users email address.
 
         The --password option sets an encrypted password for HTTP Basic authentication and Cyclid
@@ -77,11 +83,13 @@ module Cyclid
 
         The --secret option sets a shared secret which is used for signing Cyclid API requests.
       LONGDESC
+      option :name, aliases: '-n'
       option :email, aliases: '-e'
       option :password, aliases: '-p'
       option :secret, aliases: '-s'
       def modify(username)
         client.user_modify(username,
+                           name: options[:name],
                            email: options[:email],
                            password: options[:password],
                            secret: options[:secret])

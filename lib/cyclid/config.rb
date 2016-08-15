@@ -41,7 +41,16 @@ module Cyclid
 
       include AuthMethods
 
-      # @param path [String] Fully qualified path to the configuration file
+      # @param [Hash] options
+      # @option options [String] :path Fully qualified path to the configuration file
+      # @option options [FixNum] :auth Authentication method
+      # @option options [String] :username Users username.
+      # @option options [String] :secret Users secret for use with HMAC authentication.
+      # @option options [String] :password Users password for use with HTTP Basic authentication.
+      # @option options [String] :token Users API token for use with Token authentication.
+      # @option options [String] :server API server address.
+      # @option options [Integer] :port API server port.
+      # @option options [String] :organization
       def initialize(options = {})
         # Load the config if a path was provided
         @path = options[:path] || nil

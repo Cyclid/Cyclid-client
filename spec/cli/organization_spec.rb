@@ -126,7 +126,7 @@ describe Cyclid::Cli::Organization do
       it 'fails gracefully if the configuration file can not be parsed' do
         allow(YAML).to receive(:load_file).and_raise(Errno::ENOENT)
 
-        expect{ subject.list }.to output(/Failed to load config file \/path\/to\/(org1|org2)/).to_stderr
+        expect{ subject.list }.to output(%r{Failed to load config file \/path\/to\/(org1|org2)}).to_stderr
       end
     end
 
