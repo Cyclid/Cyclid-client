@@ -3,9 +3,9 @@ require 'client_helper'
 describe Cyclid::Client::Health do
   context 'retrieving the API health' do
     let :config do
-      {auth: Cyclid::Client::AUTH_NONE,
-       server: 'example.com',
-       port: 9999}
+      { auth: Cyclid::Client::AUTH_NONE,
+        server: 'example.com',
+        port: 9999 }
     end
 
     subject do
@@ -17,7 +17,7 @@ describe Cyclid::Client::Health do
         .with(headers: { 'Accept' => '*/*',
                          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
                          'Host' => 'example.com:9999',
-                         'User-Agent' => 'Ruby'})
+                         'User-Agent' => 'Ruby' })
         .to_return(status: 200)
 
       status = nil
@@ -30,7 +30,7 @@ describe Cyclid::Client::Health do
         .with(headers: { 'Accept' => '*/*',
                          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
                          'Host' => 'example.com:9999',
-                         'User-Agent' => 'Ruby'})
+                         'User-Agent' => 'Ruby' })
         .to_return(status: 503)
 
       status = nil
