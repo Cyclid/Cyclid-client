@@ -108,6 +108,7 @@ module Cyclid
   end
 end
 
+require 'cyclid/client/api/none'
 require 'cyclid/client/api/hmac'
 require 'cyclid/client/api/basic'
 require 'cyclid/client/api/token'

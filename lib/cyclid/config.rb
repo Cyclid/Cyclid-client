@@ -59,6 +59,8 @@ module Cyclid
         # Select the authentication type & associated authentication data.
         @auth = options[:auth] || AUTH_HMAC
         case @auth
+        when AUTH_NONE
+          # Nothing
         when AUTH_HMAC
           @secret = options[:secret] || @config['secret']
         when AUTH_BASIC
@@ -83,7 +85,7 @@ module Cyclid
 
         # Server & Username *must* be set
         raise 'server address must be provided' if @server.nil?
-        raise 'username must be provided' if @username.nil?
+        raise 'username must be provided' if @username.nil? and @auth != AUTH_NONE
       end
     end
   end

@@ -60,6 +60,8 @@ module Cyclid
 
         # Select the API methods to use
         @api = case @config.auth
+               when AuthMethods::AUTH_NONE
+                 Api::None.new(@config, @logger)
                when AuthMethods::AUTH_HMAC
                  Api::Hmac.new(@config, @logger)
                when AuthMethods::AUTH_BASIC
