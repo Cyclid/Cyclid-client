@@ -17,7 +17,7 @@ module Cyclid
     # Health-check related methods
     module Health
       # Ping the API server.
-      # @return [Hash] Decoded server response object.
+      # @return [Boolean] True if the API server is healthy, false if it is unhealthy.
       def health_ping
         uri = server_uri('/health/status')
 
