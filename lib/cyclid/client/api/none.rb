@@ -13,13 +13,17 @@
 # limitations under the License.
 
 module Cyclid
+  # Cyclid client methods
   module Client
-    # Possible authentication methods
-    module AuthMethods
-      AUTH_NONE = 0,
-      AUTH_HMAC = 1,
-      AUTH_BASIC = 2,
-      AUTH_TOKEN = 3
+    # Client API HTTP methods
+    module Api
+      # Only works for non-authenticated request (E.g. healthchecks)
+      class None < Base
+        # Do nothing
+        def authenticate_request(request, _uri)
+          request
+        end
+      end
     end
   end
 end

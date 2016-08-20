@@ -14,12 +14,21 @@
 
 module Cyclid
   module Client
-    # Possible authentication methods
-    module AuthMethods
-      AUTH_NONE = 0,
-      AUTH_HMAC = 1,
-      AUTH_BASIC = 2,
-      AUTH_TOKEN = 3
+    # Health-check related methods
+    module Health
+      # Ping the API server.
+      # @return [Boolean] True if the API server is healthy, false if it is unhealthy.
+      def health_ping
+        uri = server_uri('/health/status')
+
+        # We need to do without the API helpers as the health endpoint won't
+        # return any data, just an HTTP status
+        req = authenticate_request(Net::HTTP::Get.new(uri), uri)
+        http = Net::HTTP.new(uri.hostname, uri.port)
+        res = http.request(req)
+
+        return res.code == '200'
+      end
     end
   end
 end

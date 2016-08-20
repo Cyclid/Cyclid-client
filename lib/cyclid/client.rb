@@ -26,6 +26,7 @@ require 'cyclid/client/organization'
 require 'cyclid/client/job'
 require 'cyclid/client/stage'
 require 'cyclid/client/auth'
+require 'cyclid/client/health'
 
 module Cyclid
   # Cyclid client methods
@@ -60,6 +61,8 @@ module Cyclid
 
         # Select the API methods to use
         @api = case @config.auth
+               when AuthMethods::AUTH_NONE
+                 Api::None.new(@config, @logger)
                when AuthMethods::AUTH_HMAC
                  Api::Hmac.new(@config, @logger)
                when AuthMethods::AUTH_BASIC
@@ -74,6 +77,7 @@ module Cyclid
       include Job
       include Stage
       include Auth
+      include Health
 
       private
 
