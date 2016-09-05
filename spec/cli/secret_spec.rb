@@ -5,7 +5,7 @@ describe Cyclid::Cli::Secret do
   context 'using the "secret" commands' do
     before do
       subject.options = { config: ENV['TEST_CONFIG'] }
-      allow($stdin).to receive(:gets).and_return('sekrit')
+      allow($stdin).to receive(:noecho).and_return('sekrit')
     end
 
     describe '#encrypt' do
