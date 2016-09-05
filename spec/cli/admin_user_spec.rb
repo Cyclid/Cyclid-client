@@ -238,7 +238,7 @@ describe Cyclid::Cli::AdminUser do
                            'X-Hmac-Nonce' => /.*/ })
           .to_return(status: 200, body: '{}', headers: {})
 
-        allow($stdin).to receive(:gets).and_return('m1lkb0ne')
+        allow($stdin).to receive(:noecho).and_return('m1lkb0ne')
         expect{ subject.passwd('bob') }.to_not raise_error
       end
 
@@ -254,7 +254,7 @@ describe Cyclid::Cli::AdminUser do
                            'X-Hmac-Nonce' => /.*/ })
           .to_return(status: 500, body: '{}', headers: {})
 
-        allow($stdin).to receive(:gets).and_return(SecureRandom.hex)
+        allow($stdin).to receive(:noecho).and_return(SecureRandom.hex)
         expect{ subject.passwd('bob') }.to raise_error SystemExit
       end
 
@@ -269,7 +269,7 @@ describe Cyclid::Cli::AdminUser do
                            'X-Hmac-Nonce' => /.*/ })
           .to_return(status: 404, body: '{}', headers: {})
 
-        allow($stdin).to receive(:gets).and_return('m1lkb0ne')
+        allow($stdin).to receive(:noecho).and_return('m1lkb0ne')
         expect{ subject.passwd('bob') }.to raise_error SystemExit
       end
     end
