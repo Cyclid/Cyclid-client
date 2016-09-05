@@ -160,6 +160,9 @@ describe Cyclid::Cli::Organization do
         allow(File).to receive(:exist?).and_return(true)
         allow(File).to receive(:file?).and_return(true)
         allow(YAML).to receive(:load_file).and_return(YAML.load_file(ENV['TEST_CONFIG']))
+        allow(Dir).to receive(:chdir).and_return(true)
+        allow(File).to receive(:delete).and_return(true)
+        allow(File).to receive(:symlink).and_return(true)
 
         expect{ subject.use('org') }.to_not raise_error
       end
