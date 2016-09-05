@@ -5,9 +5,20 @@
       "packages" : [
          "ruby2.0",
          "ruby2.0-dev",
-         "libmysqlclient-dev"
+         "build-essential",
+         "git"
       ]
    },
+   "sources": [
+      {
+        "type": "git",
+        "url": "https://github.com/Liqwyd/Cyclid-core"
+      },
+      {
+        "type": "git",
+        "url": "https://github.com/Liqwyd/Cyclid-client"
+      }
+   ],
    "stages" : [
       {
          "name" : "bundle-install",
@@ -34,6 +45,16 @@
          ]
       },
       {
+        "name" : "test",
+        "steps" : [
+          {
+            "action" : "command",
+            "cmd" : "bundle exec rake spec",
+            "path" : "%{workspace}/Cyclid-client"
+          }
+        ]
+      },
+      {
          "name" : "build",
          "steps" : [
             {
@@ -42,6 +63,27 @@
                "path" : "%{workspace}/Cyclid-client"
             }
          ]
+      },
+      {
+        "name": "success",
+        "steps": [
+          {
+            "action" : "slack",
+            "subject" : "%{job_name} succeeded",
+            "message" : "Build %{organization}/%{job_name} (job #%{job_id}) completed successfully."
+          }
+        ]
+      },
+      {
+        "name": "failure",
+        "steps": [
+          {
+            "action" : "slack",
+            "subject" : "%{job_name} failed",
+            "message" : "Build %{organization}/%{job_name} (job #%{job_id}) failed.",
+            "color" : "danger"
+          }
+        ]
       }
    ],
    "sequence" : [
@@ -59,12 +101,6 @@
          "stage" : "build",
          "on_success" : "success",
          "on_failure" : "failure"
-      },
-      {
-         "stage" : "success"
-      },
-      {
-         "stage" : "failure"
       }
    ]
 }
