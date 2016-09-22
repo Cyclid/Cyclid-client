@@ -64,7 +64,7 @@ module Cyclid
           # Add the user to the organization and create the appropriate admin
           # permissions for them.
           client.org_modify(name,
-                            members: options[:admin])
+                            members: [options[:admin]])
 
           perms = { 'admin' => true, 'write' => true, 'read' => true }
           client.org_user_permissions(name,
