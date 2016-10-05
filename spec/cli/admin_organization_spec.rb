@@ -133,7 +133,7 @@ describe Cyclid::Cli::AdminOrganization do
           .to_return(status: 200, body: '{}', headers: {})
 
         stub_request(:put, 'http://localhost:9999/organizations/test')
-          .with(body: '{"users":"leslie"}',
+          .with(body: '{"users":["leslie"]}',
                 headers: { 'Accept' => '*/*',
                            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
                            'Authorization' => /\AHMAC admin:.*\z/,
