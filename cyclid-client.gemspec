@@ -1,7 +1,12 @@
 # rubocop:disable Metrics/LineLength
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require 'cyclid/version'
+
 Gem::Specification.new do |s|
   s.name        = 'cyclid-client'
-  s.version     = '0.3.0'
+  s.version     = Cyclid::Client::VERSION
   s.licenses    = ['Apache-2.0']
   s.summary     = 'Cyclid command line client & library'
   s.description = 'Cyclid command line client for interacting with a Cyclid server and the Ruby client library.'
