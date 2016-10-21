@@ -55,8 +55,6 @@ module Cyclid
                 end
               end
             end
-          else
-            raise "unknown schema type #{type}"
           end
         end
       rescue StandardError => ex
