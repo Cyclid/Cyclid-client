@@ -30,6 +30,9 @@ module Cyclid
           when 'string', 'integer'
             data = config[name] || 'Not set'
             puts "#{setting['description']}: ".colorize(:cyan) + data
+          when 'password'
+            data = config[name] ? '*' * config[name].length : 'Not set'
+            puts "#{setting['description']}: ".colorize(:cyan) + data
           when 'boolean'
             data = config[name] || 'Not set'
             puts "#{setting['description']}: ".colorize(:cyan) + (data ? 'true' : 'false')
@@ -55,8 +58,6 @@ module Cyclid
                 end
               end
             end
-          else
-            raise "unknown schema type #{type}"
           end
         end
       rescue StandardError => ex
