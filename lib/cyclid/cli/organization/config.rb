@@ -30,6 +30,9 @@ module Cyclid
           when 'string', 'integer'
             data = config[name] || 'Not set'
             puts "#{setting['description']}: ".colorize(:cyan) + data
+          when 'password'
+            data = config[name] ? '*' * config[name].length : 'Not set'
+            puts "#{setting['description']}: ".colorize(:cyan) + data
           when 'boolean'
             data = config[name] || 'Not set'
             puts "#{setting['description']}: ".colorize(:cyan) + (data ? 'true' : 'false')
