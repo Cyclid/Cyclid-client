@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Copyright 2016 Liqwyd Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -107,7 +108,7 @@ module Cyclid
           delete = true
         else
           print "Delete organization #{name}: are you sure? (Y/n): ".colorize(:red)
-          delete = STDIN.getc.chr.casecmp('y') == 0
+          delete = STDIN.getc.chr.casecmp('y').zero?
         end
         abort unless delete
 

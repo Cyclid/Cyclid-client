@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Copyright 2016 Liqwyd Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,7 +89,7 @@ module Cyclid
                         path: path)
       end
 
-      def method_missing(method, *args, &block)
+      def method_missing(method, *args, &block) # rubocop:disable Style/MethodMissing
         @api.send(method, *args, &block)
       end
     end

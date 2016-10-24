@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Copyright 2016 Liqwyd Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -110,7 +111,7 @@ module Cyclid
               true
             else
               print "Remove user #{user}: are you sure? (Y/n): ".colorize(:red)
-              STDIN.getc.chr.casecmp('y') == 0
+              STDIN.getc.chr.casecmp('y').zero?
             end
           end
         end

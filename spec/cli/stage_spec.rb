@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'cli_helper'
 
 describe Cyclid::Cli::Stage do
