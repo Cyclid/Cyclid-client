@@ -88,7 +88,7 @@ describe Cyclid::Cli::Config do
         expect{ subject.show('test', 'example') }.to output(/\tNone/).to_stdout
       end
 
-      it 'fails gracefully if the schema contains an unknown type' do
+      it 'does not fail if the schema contains an unknown type' do
         config_info = { 'schema' => [{ 'name' => 'setting1',
                                        'type' => 'invalid',
                                        'description' => 'Setting #1' }],
@@ -104,7 +104,7 @@ describe Cyclid::Cli::Config do
                            'X-Hmac-Nonce' => /.*/ })
           .to_return(status: 200, body: config_info.to_json, headers: {})
 
-        expect{ subject.show('test', 'example') }.to raise_error SystemExit
+        expect{ subject.show('test', 'example') }.to_not raise_error
       end
 
       it 'fails gracefully when the server returns a non-200 response' do
