@@ -49,7 +49,8 @@ module Cyclid
       # @param username [String] User name of the new user.
       # @param name [String] Users real name.
       # @param email [String] Users email address.
-      # @param password [String] Unencrypted initial password
+      # @param password [String] Unencrypted initial password OR a BCrypt2
+      #   encrypted password string.
       # @param secret [String] Initial HMAC signing secret
       # @return [Hash] Decoded server response object.
       # @see #user_modify
@@ -64,8 +65,14 @@ module Cyclid
         # Add the HMAC secret if one was supplied
         user['secret'] = secret unless secret.nil?
 
-        # Encrypt & add the password if one was supplied
-        user['password'] = BCrypt::Password.create(password).to_s unless password.nil?
+        # Add the password if one was supplied
+        user['password'] = if password =~ /\A\$2a\$.+\z/
+                             # Password is already encrypted
+                             password
+                           else
+                             # Encrypt the plaintext password
+                             BCrypt::Password.create(password).to_s
+                           end unless password.nil?
 
         @logger.debug user
 
@@ -84,6 +91,8 @@ module Cyclid
       # @option args [String] email Users email address.
       # @option args [String] secret Initial HMAC signing secret
       # @option args [String] password Unencrypted initial password
+      # @option args [String] password Unencrypted initial password OR a
+      #   BCrypt2 encrypted password string.
       # @return [Hash] Decoded server response object.
       # @see #user_add
       # @see #user_delete
@@ -104,9 +113,14 @@ module Cyclid
         # Add the HMAC secret if one was supplied
         user['secret'] = args[:secret] if args.key? :secret and args[:secret]
 
-        # Encrypt & add the password if one was supplied
-        user['password'] = BCrypt::Password.create(args[:password]).to_s \
-          if args.key? :password and args[:password]
+        # Add the password if one was supplied
+        user['password'] = if args[:password] =~ /\A\$2a\$.+\z/
+                             # Password is already encrypted
+                             args[:password]
+                           else
+                             # Encrypt the plaintext password
+                             BCrypt::Password.create(args[:password]).to_s
+                           end if args.key? :password and args[:password]
 
         @logger.debug user
 
