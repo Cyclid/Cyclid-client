@@ -98,6 +98,23 @@ describe Cyclid::Client::User do
       expect{ res = @client.user_add('bob', 'bob@example.com', nil, 'm1lkb0ne') }.to_not raise_error
       expect(res['test']).to eq('data')
     end
+
+    it 'creates a new user with a previously encrypted password specified' do
+      stub_request(:post, 'http://localhost:9999/users')
+        .with(body: /{"username":"bob","email":"bob@example.com","password":"\$2a\$10\$42uBIU4TTVTWAYs2rUN\.dO9HumdFHxsLa3qqQ2U0SvNZFMuljNhQO"}/,
+              headers: { 'Accept' => '*/*',
+                         'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                         'Authorization' => /\AHMAC admin:.*\z/,
+                         'Host' => 'localhost:9999',
+                         'User-Agent' => 'Ruby',
+                         'Date' => /.*/,
+                         'X-Hmac-Nonce' => /.*/ })
+        .to_return(status: 200, body: '{"test": "data"}', headers: {})
+
+      res = {}
+      expect{ res = @client.user_add('bob', 'bob@example.com', nil, '$2a$10$42uBIU4TTVTWAYs2rUN.dO9HumdFHxsLa3qqQ2U0SvNZFMuljNhQO') }.to_not raise_error
+      expect(res['test']).to eq('data')
+    end
   end
 
   context 'modifying users' do
@@ -156,6 +173,25 @@ describe Cyclid::Client::User do
         .to_return(status: 200, body: '{"test": "data"}', headers: {})
 
       new_user = { password: 'm1lkb0ne' }
+
+      res = {}
+      expect{ res = @client.user_modify('bob', new_user) }.to_not raise_error
+      expect(res['test']).to eq('data')
+    end
+
+    it 'changes the users password with a previously encrypted password' do
+      stub_request(:put, 'http://localhost:9999/users/bob')
+        .with(body: /{"password":"\$2a\$10\$42uBIU4TTVTWAYs2rUN\.dO9HumdFHxsLa3qqQ2U0SvNZFMuljNhQO"}/,
+              headers: { 'Accept' => '*/*',
+                         'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                         'Authorization' => /\AHMAC admin:.*\z/,
+                         'Host' => 'localhost:9999',
+                         'User-Agent' => 'Ruby',
+                         'Date' => /.*/,
+                         'X-Hmac-Nonce' => /.*/ })
+        .to_return(status: 200, body: '{"test": "data"}', headers: {})
+
+      new_user = { password: '$2a$10$42uBIU4TTVTWAYs2rUN.dO9HumdFHxsLa3qqQ2U0SvNZFMuljNhQO' }
 
       res = {}
       expect{ res = @client.user_modify('bob', new_user) }.to_not raise_error
