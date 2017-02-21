@@ -71,8 +71,9 @@ module Cyclid
             config = Cyclid::Client::Config.new(path: fname)
 
             puts File.basename(fname).colorize(:cyan)
-            uri = URI::HTTP.build(host: config.server, port: config.port)
-            puts "\tServer: ".colorize(:cyan) + uri.to_s
+            scheme = config.tls ? URI::HTTPS : URI::HTTP
+            uri = scheme.build(host: config.server, port: config.port)
+            puts "\tURL: ".colorize(:cyan) + uri.to_s
             puts "\tOrganization: ".colorize(:cyan) + config.organization
             puts "\tUsername: ".colorize(:cyan) + config.username
           rescue StandardError => ex

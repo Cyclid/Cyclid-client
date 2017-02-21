@@ -119,7 +119,7 @@ describe Cyclid::Cli::Organization do
 
         expect{ subject.list }.to_not raise_error
         expect{ subject.list }.to output(/.*(org1|org2)/).to_stdout
-        expect{ subject.list }.to output(/.*Server:.*localhost/).to_stdout
+        expect{ subject.list }.to output(/.*URL:.*localhost/).to_stdout
         expect{ subject.list }.to output(/.*Organization:.*admins/).to_stdout
         expect{ subject.list }.to output(/.*Username:.*admin/).to_stdout
       end

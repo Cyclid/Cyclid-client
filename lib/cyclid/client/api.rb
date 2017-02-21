@@ -79,6 +79,8 @@ module Cyclid
         # Perform an API HTTP request & return the parsed response body
         def api_request(uri, req)
           http = Net::HTTP.new(uri.hostname, uri.port)
+          http.use_ssl = uri.scheme == 'https'
+
           res = http.request(req)
 
           parse_response(res)
