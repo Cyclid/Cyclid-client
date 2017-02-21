@@ -78,12 +78,16 @@ module Cyclid
         started = job['started'].nil? ? nil : Time.parse(job['started'])
         ended = job['ended'].nil? ? nil : Time.parse(job['ended'])
 
+        # Calculate the duration if the job contains a valid start & end time
+        duration = (Time.new(0) + (ended - started) if started && ended)
+
         # Pretty-print the job details (without the log)
         puts 'Job: '.colorize(:cyan) + job['id'].to_s
         puts 'Name: '.colorize(:cyan) + (job['job_name'] || '')
         puts 'Version: '.colorize(:cyan) + (job['job_version'] || '')
         puts 'Started: '.colorize(:cyan) + (started ? started.asctime : '')
         puts 'Ended: '.colorize(:cyan) + (ended ? ended.asctime : '')
+        puts 'Duration: '.colorize(:cyan) + duration.strftime('%H:%M:%S') if duration
         puts 'Status: '.colorize(:cyan) + status
       rescue StandardError => ex
         abort "Failed to get job status: #{ex}"
