@@ -81,6 +81,7 @@ module Cyclid
         end
 
         # Set defaults from the options
+        @url = options[:url] || nil
         @server = options[:server] || nil
         @port = options[:port] || nil
         @tls = options[:tls] || nil
@@ -89,19 +90,23 @@ module Cyclid
 
         # Get anything provided in the config file
         if @config
-          if @config.key? 'url'
-            uri = URI.parse(@config['url'])
-
-            @server ||= uri.host
-            @port ||= uri.port
-            @tls ||= uri.scheme == 'https' ? true : false
-          else
-            @server ||= @config['server']
-            @port ||= @config['port'] || 8361
-            @tls ||= @config['tls'] || false
-          end
+          @url ||= @config['url']
+          @server ||= @config['server']
+          @port ||= @config['port'] || 8361
+          @tls ||= @config['tls'] || false
           @organization ||= @config['organization']
           @username ||= @config['username']
+        end
+
+        # Parse the URL if one was given
+        if @url
+          uri = URI.parse(@url)
+
+          # Items parsed from the uri always over-write any individual
+          # configuration settings
+          @server = uri.host
+          @port = uri.port
+          @tls = uri.scheme == 'https' ? true : false
         end
 
         # Server & Username *must* be set

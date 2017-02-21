@@ -80,6 +80,62 @@ module Cyclid
           abort "Failed to modify user: #{ex}"
         end
       end
+
+      desc 'authenticate', 'Authenticate your client with a server'
+      long_desc <<-LONGDESC
+        Authenticate against a Cyclid server with your username & password and
+        create your client configuration files.
+
+        The --server option sets the Cyclid server URL. The default is 'https://api.cyclid.io'
+
+        The --username option sets your username to authenticate with.
+      LONGDESC
+
+      option :server, aliases: '-s'
+      option :username, aliases: '-u'
+      def authenticate
+        url = options[:server] || 'https://api.cyclid.io'
+        username = options[:username]
+
+        # Get the username if one wasn't provided
+        if username.nil?
+          print 'Username: '
+          username = STDIN.gets.chomp
+        end
+
+        # Get the users password
+        print 'Password: '
+        password = STDIN.noecho(&:gets).chomp
+        puts
+
+        # Create a client that can authenticate with HTTP BASIC
+        puts "Authenticating #{username} with #{url}".colorize(:cyan)
+
+        basic_client = Cyclid::Client::Tilapia.new(auth: Cyclid::Client::AuthMethods::AUTH_BASIC,
+                                                   url: url,
+                                                   username: username,
+                                                   password: password,
+                                                   log_level: debug?)
+
+        # Get the user information
+        user = basic_client.user_get(username)
+
+        # Ensure the configuration directory exists
+        Dir.mkdir(CYCLID_CONFIG_DIR, 0o700) unless Dir.exist? CYCLID_CONFIG_DIR
+
+        # Generate a configuration file for each organization
+        user['organizations'].each do |org|
+          puts "Creating configuration file for organization #{org}".colorize(:cyan)
+
+          org_config = File.new(File.join(CYCLID_CONFIG_DIR, org), 'w+', 0o600)
+          org_config.write "url: #{url}\n"
+          org_config.write "organization: #{org}\n"
+          org_config.write "username: #{username}\n"
+          org_config.write "secret: #{user['secret']}\n"
+        end
+      rescue StandardError => ex
+        abort "Failed to authenticate user: #{ex}"
+      end
     end
   end
 end
