@@ -115,7 +115,7 @@ module Cyclid
           # The configuration file exists and appears to be sane, so switch the
           # 'config' symlink to point to it.
           Dir.chdir(CYCLID_CONFIG_DIR) do
-            File.delete('config')
+            File.delete('config') if File.exist?('config')
             File.symlink(name, 'config')
           end
         end
