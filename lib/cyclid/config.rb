@@ -14,13 +14,23 @@
 # limitations under the License.
 
 require 'yaml'
+require 'uri'
 require 'cyclid/auth_methods'
 
 module Cyclid
   module Client
     # Cyclid client per-organization configuration
     class Config
-      attr_reader :auth, :server, :port, :organization, :username, :secret, :password, :token, :path
+      attr_reader :auth,
+                  :server,
+                  :port,
+                  :tls,
+                  :organization,
+                  :username,
+                  :secret,
+                  :password,
+                  :token,
+                  :path
       # @!attribute [r] auth
       #   @return [Fixnum] the authentication method. (Default is AUTH_HMAC)
       # @!attribute [r] server
@@ -73,13 +83,23 @@ module Cyclid
         # Set defaults from the options
         @server = options[:server] || nil
         @port = options[:port] || nil
+        @tls = options[:tls] || nil
         @organization = options[:organization] || nil
         @username = options[:username] || nil
 
         # Get anything provided in the config file
         if @config
-          @server ||= @config['server']
-          @port ||= @config['port'] || 8361
+          if @config.key? 'url'
+            uri = URI.parse(@config['url'])
+
+            @server ||= uri.host
+            @port ||= uri.port
+            @tls ||= uri.scheme == 'https' ? true : false
+          else
+            @server ||= @config['server']
+            @port ||= @config['port'] || 8361
+            @tls ||= @config['tls'] || false
+          end
           @organization ||= @config['organization']
           @username ||= @config['username']
         end
