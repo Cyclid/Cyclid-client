@@ -21,7 +21,7 @@ module Cyclid
       def list
         stages = client.stage_list(client.config.organization)
         stages.each do |stage|
-          puts "#{stage[:name]} v#{stage[:version]}"
+          Formatter.puts "#{stage[:name]} v#{stage[:version]}"
         end
       rescue StandardError => ex
         abort "Failed to get stages: #{ex}"
@@ -33,14 +33,14 @@ module Cyclid
 
         # Pretty print the stage details
         stages.each do |stage|
-          puts 'Name: '.colorize(:cyan) + stage['name']
-          puts 'Version: '.colorize(:cyan) + stage['version']
-          puts 'Steps'.colorize(:cyan)
+          Formatter.colorize 'Name', stage['name']
+          Formatter.colorize 'Version', stage['version']
+          Formatter.colorize 'Steps'
           stage['steps'].each do |step|
-            puts "\t\tAction: ".colorize(:cyan) + step['action']
+            Formatter.colorize"\t\tAction", step['action']
             step.delete('action')
             step.each do |k, v|
-              puts "\t\t#{k.capitalize}: ".colorize(:cyan) + v.to_s
+              Formatter.colorize "\t\t#{k.capitalize}: ", v.to_s
             end
           end
         end

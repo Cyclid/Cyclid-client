@@ -32,16 +32,16 @@ module Cyclid
         user = client.user_get(username)
 
         # Pretty print the user details
-        puts 'Username: '.colorize(:cyan) + user['username']
-        puts 'Name: '.colorize(:cyan) + (user['name'] || '')
-        puts 'Email: '.colorize(:cyan) + user['email']
-        puts 'Organizations:'.colorize(:cyan)
+        Formatter.colorize 'Username', user['username']
+        Formatter.colorize 'Name', (user['name'] || '')
+        Formatter.colorize 'Email', user['email']
+        Formatter.colorize 'Organizations:'
         if user['organizations'].any?
           user['organizations'].each do |org|
-            puts "\t#{org}"
+            Formatter.puts "\t#{org}"
           end
         else
-          puts "\tNone"
+          Formatter.puts "\tNone"
         end
       rescue StandardError => ex
         abort "Failed to get user: #{ex}"
@@ -127,7 +127,7 @@ module Cyclid
         if options[:force]
           delete = true
         else
-          print "Delete user #{username}: are you sure? (Y/n): ".colorize(:red)
+          Formatter.ask "Delete user #{username}: are you sure? (Y/n)"
           delete = STDIN.getc.chr.casecmp('y').zero?
         end
         abort unless delete

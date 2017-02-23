@@ -63,7 +63,7 @@ module Cyclid
         end
 
         job_info = client.job_submit(client.config.organization, job, job_type)
-        puts 'Job: '.colorize(:cyan) + job_info['job_id'].to_s
+        Formatter.colorize 'Job', job_info['job_id'].to_s
       rescue StandardError => ex
         abort "Failed to submit job: #{ex}"
       end
@@ -82,13 +82,13 @@ module Cyclid
         duration = (Time.new(0) + (ended - started) if started && ended)
 
         # Pretty-print the job details (without the log)
-        puts 'Job: '.colorize(:cyan) + job['id'].to_s
-        puts 'Name: '.colorize(:cyan) + (job['job_name'] || '')
-        puts 'Version: '.colorize(:cyan) + (job['job_version'] || '')
-        puts 'Started: '.colorize(:cyan) + (started ? started.asctime : '')
-        puts 'Ended: '.colorize(:cyan) + (ended ? ended.asctime : '')
-        puts 'Duration: '.colorize(:cyan) + duration.strftime('%H:%M:%S') if duration
-        puts 'Status: '.colorize(:cyan) + status
+        Formatter.colorize 'Job', job['id'].to_s
+        Formatter.colorize 'Name', (job['job_name'] || '')
+        Formatter.colorize 'Version', (job['job_version'] || '')
+        Formatter.colorize 'Started', (started ? started.asctime : '')
+        Formatter.colorize 'Ended', (ended ? ended.asctime : '')
+        Formatter.colorize 'Duration', duration.strftime('%H:%M:%S') if duration
+        Formatter.colorize 'Status', status
       rescue StandardError => ex
         abort "Failed to get job status: #{ex}"
       end
@@ -101,7 +101,7 @@ module Cyclid
         status = Cyclid::API::Constants::JOB_STATUSES[status_id]
 
         # Pretty-print the job status
-        puts 'Status: '.colorize(:cyan) + status
+        Formatter.colorize 'Status', status
       rescue StandardError => ex
         abort "Failed to get job status: #{ex}"
       end
@@ -122,9 +122,9 @@ module Cyclid
         jobs = all['records']
 
         jobs.each do |job|
-          puts 'Name: '.colorize(:cyan) + (job['job_name'] || '')
-          puts "\tJob: ".colorize(:cyan) + job['id'].to_s
-          puts "\tVersion: ".colorize(:cyan) + (job['job_version'] || '')
+          Formatter.colorize 'Name', (job['job_name'] || '')
+          Formatter.colorize "\tJob", job['id'].to_s
+          Formatter.colorize "\tVersion", (job['job_version'] || '')
         end
       rescue StandardError => ex
         abort "Failed to get job list: #{ex}"
@@ -134,7 +134,7 @@ module Cyclid
       def stats
         stats = client.job_stats(client.config.organization)
 
-        puts 'Total jobs: '.colorize(:cyan) + stats['total'].to_s
+        Formatter.colorize 'Total jobs', stats['total'].to_s
       rescue StandardError => ex
         abort "Failed to get job list: #{ex}"
       end

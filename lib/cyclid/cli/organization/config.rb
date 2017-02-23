@@ -30,32 +30,32 @@ module Cyclid
           case type
           when 'string', 'integer'
             data = config[name] || 'Not set'
-            puts "#{setting['description']}: ".colorize(:cyan) + data
+            Formatter.colorize setting['description'], data
           when 'password'
             data = config[name] ? '*' * config[name].length : 'Not set'
-            puts "#{setting['description']}: ".colorize(:cyan) + data
+            Formatter.colorize setting['description'], data
           when 'boolean'
             data = config[name] || 'Not set'
-            puts "#{setting['description']}: ".colorize(:cyan) + (data ? 'true' : 'false')
+            Formatter.colorize setting['description'], (data ? 'true' : 'false')
           when 'list'
-            puts setting['description'].colorize(:cyan)
+            Formatter.colorize setting['description']
             data = config[name]
             if data.empty?
-              puts "\tNone"
+              Formatter.puts "\tNone"
             else
               data.each do |item|
-                puts "\t#{item}"
+                Formatter.puts "\t#{item}"
               end
             end
           when 'hash-list'
-            puts setting['description'].colorize(:cyan)
+            Formatter.colorize setting['description']
             data = config[name]
             if data.empty?
-              puts "\tNone"
+              Formatter.puts "\tNone"
             else
               data.each do |item|
                 item.each do |k, v|
-                  puts "\t#{k}: #{v}"
+                  Formatter.puts "\t#{k}: #{v}"
                 end
               end
             end

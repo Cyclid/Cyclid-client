@@ -34,7 +34,7 @@ module Cyclid
         # Encrypt with the public key
         encrypted = public_key.public_encrypt(secret)
 
-        puts 'Secret: '.colorize(:cyan) + Base64.strict_encode64(encrypted)
+        Formatter.colorize 'Secret', Base64.strict_encode64(encrypted)
       rescue StandardError => ex
         abort "Failed to encrypt secret: #{ex}"
       end

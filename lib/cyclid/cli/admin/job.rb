@@ -24,12 +24,11 @@ module Cyclid
         jobs = all['records']
 
         jobs.each do |job|
-          puts 'Name: '.colorize(:cyan) + (job['job_name'] || '')
-          puts "\tJob: ".colorize(:cyan) + job['id'].to_s
-          puts "\tVersion: ".colorize(:cyan) + (job['job_version'] || '')
+          Formatter.colorize 'Name', (job['job_name'] || '')
+          Formatter.colorize "\tJob", job['id'].to_s
+          Formatter.colorize "\tVersion", (job['job_version'] || '')
         end
       rescue StandardError => ex
-        STDERR.puts ex.backtrace
         abort "Failed to get job list: #{ex}"
       end
 
@@ -37,7 +36,7 @@ module Cyclid
       def stats(name)
         stats = client.job_stats(name)
 
-        puts 'Total jobs: '.colorize(:cyan) + stats['total'].to_s
+        Formatter.colorize 'Total jobs', stats['total'].to_s
       rescue StandardError => ex
         abort "Failed to get job list: #{ex}"
       end

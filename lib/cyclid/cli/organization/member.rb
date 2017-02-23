@@ -82,11 +82,11 @@ module Cyclid
         user = client.org_user_get(client.config.organization, user)
 
         # Pretty print the user details
-        puts 'Username: '.colorize(:cyan) + user['username']
-        puts 'Email: '.colorize(:cyan) + user['email']
-        puts 'Permissions'.colorize(:cyan)
+        Formatter.colorize 'Username', user['username']
+        Formatter.colorize 'Email: ', user['email']
+        Formatter.colorize 'Permissions'
         user['permissions'].each do |k, v|
-          puts "\t#{k.capitalize}: ".colorize(:cyan) + v.to_s
+          Formatter.colorize "\t#{k.capitalize}", v.to_s
         end
       rescue StandardError => ex
         abort "Failed to get user: #{ex}"
@@ -110,7 +110,7 @@ module Cyclid
             if options[:force]
               true
             else
-              print "Remove user #{user}: are you sure? (Y/n): ".colorize(:red)
+              Formatter.ask "Remove user #{user}: are you sure? (Y/n)"
               STDIN.getc.chr.casecmp('y').zero?
             end
           end
