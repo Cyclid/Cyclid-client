@@ -84,6 +84,25 @@ module Cyclid
 
         return res_data
       end
+
+      def job_stats(organization)
+        uri = server_uri("/organizations/#{organization}/jobs", 'stats_only=true')
+        res_data = api_get(uri)
+        @logger.debug res_data
+
+        return res_data
+      end
+
+      def job_list(organization, args = {})
+        # Convert the args hash into a query string
+        query = args.map { |k, v| "#{k}=#{v}" }.join('&')
+
+        uri = server_uri("/organizations/#{organization}/jobs", query)
+        res_data = api_get(uri)
+        @logger.debug res_data
+
+        return res_data
+      end
     end
   end
 end

@@ -114,6 +114,30 @@ module Cyclid
       rescue StandardError => ex
         abort "Failed to get job log: #{ex}"
       end
+
+      desc 'list', 'List all jobs'
+      def list
+        stats = client.job_stats(client.config.organization)
+        all = client.job_list(client.config.organization, limit: stats['total'])
+        jobs = all['records']
+
+        jobs.each do |job|
+          puts 'Name: '.colorize(:cyan) + (job['job_name'] || '')
+          puts "\tJob: ".colorize(:cyan) + job['id'].to_s
+          puts "\tVersion: ".colorize(:cyan) + (job['job_version'] || '')
+        end
+      rescue StandardError => ex
+        abort "Failed to get job list: #{ex}"
+      end
+
+      desc 'stats', 'Show statistics about jobs'
+      def stats
+        stats = client.job_stats(client.config.organization)
+
+        puts 'Total jobs: '.colorize(:cyan) + stats['total'].to_s
+      rescue StandardError => ex
+        abort "Failed to get job list: #{ex}"
+      end
     end
   end
 end
