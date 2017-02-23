@@ -83,11 +83,12 @@ module Cyclid
       private
 
       # Build a URI for the configured server & required resource
-      def server_uri(path)
+      def server_uri(path, query = nil)
         scheme = @config.tls ? URI::HTTPS : URI::HTTP
         scheme.build(host: @config.server,
                      port: @config.port,
-                     path: path)
+                     path: path,
+                     query: query)
       end
 
       def method_missing(method, *args, &block) # rubocop:disable Style/MethodMissing
