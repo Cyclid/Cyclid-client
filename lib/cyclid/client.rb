@@ -87,8 +87,8 @@ module Cyclid
         scheme = @config.tls ? URI::HTTPS : URI::HTTP
         scheme.build(host: @config.server,
                      port: @config.port,
-                     path: path,
-                     query: query)
+                     path: URI.escape(path),
+                     query: query ? URI.escape(query) : nil)
       end
 
       def method_missing(method, *args, &block) # rubocop:disable Style/MethodMissing

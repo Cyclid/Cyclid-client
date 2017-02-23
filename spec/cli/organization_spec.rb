@@ -30,7 +30,7 @@ describe Cyclid::Cli::Organization do
         expect{ subject.show }.to output(/Name:.*test/).to_stdout
         expect{ subject.show }.to output(/Owner Email:.*test@example.com/).to_stdout
         expect{ subject.show }.to output(/Public Key:.*-----BEGIN PUBLIC KEY-----/).to_stdout
-        expect{ subject.show }.to output(/Members:.*\n\s*None/).to_stdout
+        expect{ subject.show }.to output(/Members.*\n\s*None/).to_stdout
       end
 
       it 'shows an organization with members' do
@@ -54,7 +54,7 @@ describe Cyclid::Cli::Organization do
         expect{ subject.show }.to output(/Name:.*test/).to_stdout
         expect{ subject.show }.to output(/Owner Email:.*test@example.com/).to_stdout
         expect{ subject.show }.to output(/Public Key:.*-----BEGIN PUBLIC KEY-----/).to_stdout
-        expect{ subject.show }.to output(/Members:.*\n\s*bob.*\n\s*leslie/).to_stdout
+        expect{ subject.show }.to output(/Members.*\n\s*bob.*\n\s*leslie/).to_stdout
       end
 
       it 'fails gracefully when the server returns a non-200 response' do

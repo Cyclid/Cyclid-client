@@ -31,10 +31,10 @@ module Cyclid
         public_key = OpenSSL::PKey::RSA.new(der_key)
 
         # Pretty print the organization details
-        puts 'Name: '.colorize(:cyan) + org['name']
-        puts 'Owner Email: '.colorize(:cyan) + org['owner_email']
-        puts 'Public Key: '.colorize(:cyan) + public_key.to_pem
-        puts 'Members:'.colorize(:cyan)
+        Formatter.colorize 'Name', org['name']
+        Formatter.colorize 'Owner Email', org['owner_email']
+        Formatter.colorize 'Public Key', public_key.to_pem
+        Formatter.colorize 'Members'
         if org['users'].any?
           org['users'].each do |user|
             puts "\t#{user}"
@@ -70,12 +70,12 @@ module Cyclid
             # Create a Config from this file and display the details
             config = Cyclid::Client::Config.new(path: fname)
 
-            puts File.basename(fname).colorize(:cyan)
+            Formatter.colorize File.basename(fname)
             scheme = config.tls ? URI::HTTPS : URI::HTTP
             uri = scheme.build(host: config.server, port: config.port)
-            puts "\tURL: ".colorize(:cyan) + uri.to_s
-            puts "\tOrganization: ".colorize(:cyan) + config.organization
-            puts "\tUsername: ".colorize(:cyan) + config.username
+            Formatter.colorize "\tURL", uri.to_s
+            Formatter.colorize "\tOrganization", config.organization
+            Formatter.colorize "\tUsername", config.username
           rescue StandardError => ex
             $stderr.puts "Failed to load config file #{fname}: #{ex}"
           end

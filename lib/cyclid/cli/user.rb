@@ -25,16 +25,16 @@ module Cyclid
         user = client.user_get(client.config.username)
 
         # Pretty print the user details
-        puts 'Username: '.colorize(:cyan) + user['username']
-        puts 'Name: '.colorize(:cyan) + (user['name'] || '')
-        puts 'Email: '.colorize(:cyan) + user['email']
-        puts 'Organizations'.colorize(:cyan)
+        Formatter.colorize 'Username', user['username']
+        Formatter.colorize 'Name', (user['name'] || '')
+        Formatter.colorize 'Email', user['email']
+        Formatter.colorize 'Organizations'
         if user['organizations'].any?
           user['organizations'].each do |org|
-            puts "\t#{org}"
+            Formatter.puts "\t#{org}"
           end
         else
-          puts "\tNone"
+          Formatter.puts "\tNone"
         end
       rescue StandardError => ex
         abort "Failed to get user: #{ex}"
@@ -109,7 +109,7 @@ module Cyclid
         puts
 
         # Create a client that can authenticate with HTTP BASIC
-        puts "Authenticating #{username} with #{url}".colorize(:cyan)
+        Formatter.colorize "Authenticating #{username} with #{url}"
 
         basic_client = Cyclid::Client::Tilapia.new(auth: Cyclid::Client::AuthMethods::AUTH_BASIC,
                                                    url: url,
@@ -125,7 +125,7 @@ module Cyclid
 
         # Generate a configuration file for each organization
         user['organizations'].each do |org|
-          puts "Creating configuration file for organization #{org}".colorize(:cyan)
+          Formatter.colorize "Creating configuration file for organization #{org}"
 
           org_config = File.new(File.join(CYCLID_CONFIG_DIR, org), 'w+', 0o600)
           org_config.write "url: #{url}\n"

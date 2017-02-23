@@ -36,16 +36,16 @@ module Cyclid
         public_key = OpenSSL::PKey::RSA.new(der_key)
 
         # Pretty print the organization details
-        puts 'Name: '.colorize(:cyan) + org['name']
-        puts 'Owner Email: '.colorize(:cyan) + org['owner_email']
-        puts 'Public Key: '.colorize(:cyan) + public_key.to_pem
-        puts 'Members:'.colorize(:cyan)
+        Formatter.colorize 'Name', org['name']
+        Formatter.colorize 'Owner Email', org['owner_email']
+        Formatter.colorize 'Public Key', public_key.to_pem
+        Formatter.colorize 'Members:'
         if org['users'].any?
           org['users'].each do |user|
-            puts "\t#{user}"
+            Formatter.puts "\t#{user}"
           end
         else
-          puts "\tNone"
+          Formatter.puts "\tNone"
         end
       rescue StandardError => ex
         abort "Failed to get organization: #{ex}"
@@ -107,7 +107,7 @@ module Cyclid
         if options[:force]
           delete = true
         else
-          print "Delete organization #{name}: are you sure? (Y/n): ".colorize(:red)
+          Formatter.ask "Delete organization #{name}: are you sure? (Y/n)"
           delete = STDIN.getc.chr.casecmp('y').zero?
         end
         abort unless delete
