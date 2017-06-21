@@ -65,6 +65,10 @@ module Cyclid
       def initialize(options = {})
         # Load the config if a path was provided
         @path = options[:path] || nil
+        unless File.file?(@path)
+          raise "no config found at #{@path} - Have you selected an organisation with " \
+                '`cyclid organization use <name>`?'
+        end
         @config = @path.nil? ? nil : YAML.load_file(@path)
 
         # Select the authentication type & associated authentication data.
