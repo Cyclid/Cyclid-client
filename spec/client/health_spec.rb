@@ -13,6 +13,10 @@ describe Cyclid::Client::Health do
       Cyclid::Client::Tilapia.new(config)
     end
 
+    before :each do
+      allow(File).to receive(:file?).and_return(true)
+    end
+
     it 'retrieves the health status when the server is healthy' do
       stub_request(:get, 'http://example.com:9999/health/status')
         .with(headers: { 'Accept' => '*/*',

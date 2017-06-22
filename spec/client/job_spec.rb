@@ -2,6 +2,16 @@
 require 'client_helper'
 
 describe Cyclid::Client::Job do
+  context 'when no organization configured' do
+    it 'returns helper message instead of raw error' do
+      non_existant_path = File.join('/tmp/foo/', '.cyclid', 'config')
+      error_message = 'no config found at /tmp/foo/.cyclid/config - Have you selected an ' \
+                      'organisation with `cyclid organization use <name>`?'
+      expect{ @client = Cyclid::Client::Tilapia.new(path: non_existant_path) }
+        .to raise_error(error_message)
+    end
+  end
+
   context 'retrieving job information' do
     before :all do
       @client = Cyclid::Client::Tilapia.new(path: ENV['TEST_CONFIG'])
