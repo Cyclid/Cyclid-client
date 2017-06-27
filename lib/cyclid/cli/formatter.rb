@@ -31,6 +31,8 @@ module Cyclid
             Kernel.puts t + args.join
           end
           alias colorize puts
+          alias warning puts
+          alias error puts
 
           def ask(question)
             print "#{question}: "
@@ -42,16 +44,30 @@ module Cyclid
       class Terminal < Base
         class << self
           def colorize(title, *args)
+            puts_with_color(:cyan, title, args)
+          end
+
+          def warning(title, *args)
+            puts_with_color(:yellow, title, args)
+          end
+
+          def error(title, *args)
+            puts_with_color(:red, title, args)
+          end
+
+          def ask(question)
+            print "#{question}: ".colorize(:red)
+          end
+
+          private
+
+          def puts_with_color(color, title, *args)
             t = if args.empty?
                   title
                 else
                   "#{title}: "
                 end
-            Kernel.puts t.colorize(:cyan) + args.join
-          end
-
-          def ask(question)
-            print "#{question}: ".colorize(:red)
+            Kernel.puts t.colorize(color) + args.join
           end
         end
       end
