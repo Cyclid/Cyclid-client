@@ -17,6 +17,8 @@ require 'yaml'
 require 'json'
 require 'cyclid/constants'
 
+require_relative 'linter'
+
 module Cyclid
   module Cli
     # 'job' sub-command
@@ -137,6 +139,59 @@ module Cyclid
         Formatter.colorize 'Total jobs', stats['total'].to_s
       rescue StandardError => ex
         abort "Failed to get job list: #{ex}"
+      end
+
+      desc 'lint FILENAME', 'Check your job file for errors'
+      option :yaml, aliases: '-y'
+      option :json, aliases: '-j'
+      def lint(filename)
+        job_file = File.expand_path(filename)
+        raise 'Cannot open file' unless File.exist?(job_file)
+
+        job_type = if options[:yaml]
+                     'yaml'
+                   elsif options[:json]
+                     'json'
+                   else
+                     # Detect format
+                     match = job_file.match(/\A.*\.(json|yml|yaml)\z/)
+                     match[1]
+                   end
+        job_type = 'yaml' if job_type == 'yml'
+
+        # Attempt to load & parse the job file; any JSON or YAML syntax errors
+        # will be caught here
+        data = File.read(job_file)
+        job = if job_type == 'yaml'
+                YAML.load(data)
+              elsif job_type == 'json'
+                JSON.parse(data)
+              else
+                raise 'Unknown or unsupported file type'
+              end
+
+        # Now run the job through the Verifier to find problems
+        verifier = RemoteVerifier.new(client: client)
+        verifier.verify(job)
+
+        # Display the result summary
+        verifier.status.messages.each do |message|
+          case message[:type]
+          when Cyclid::Linter::StatusLogger::MessageTypes::WARNING
+            Formatter.warning 'Warning', message[:text]
+          when Cyclid::Linter::StatusLogger::MessageTypes::ERROR
+            Formatter.error 'Error', message[:text]
+          end
+        end
+
+        Formatter.puts ''
+        Formatter.error 'Errors', verifier.status.errors \
+          unless verifier.status.errors.zero?
+        Formatter.warning 'Warnings', verifier.status.warnings \
+          unless verifier.status.warnings.zero?
+
+        # Finish with an exit code of 1 if there were problems
+        exit 1 unless verifier.status.errors.zero? && verifier.status.warnings.zero?
       end
     end
   end
