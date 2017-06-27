@@ -25,6 +25,7 @@ module Cyclid
                   :server,
                   :port,
                   :tls,
+                  :ssl_verify_none,
                   :organization,
                   :username,
                   :secret,
@@ -89,6 +90,7 @@ module Cyclid
         @server = options[:server] || nil
         @port = options[:port] || nil
         @tls = options[:tls] || nil
+        @ssl_verify_none = options[:ssl_verify_none] || nil
         @organization = options[:organization] || nil
         @username = options[:username] || nil
 
@@ -98,6 +100,7 @@ module Cyclid
           @server ||= @config['server']
           @port ||= @config['port'] || 8361
           @tls ||= @config['tls'] || false
+          @ssl_verify_none ||= @config['ssl_verify_none'] || false
           @organization ||= @config['organization']
           @username ||= @config['username']
         end

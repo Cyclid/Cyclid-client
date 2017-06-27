@@ -60,6 +60,7 @@ describe Cyclid::Client::Api::Basic do
       allow(dbl).to receive(:port).and_return(9999)
       allow(dbl).to receive(:username).and_return('test')
       allow(dbl).to receive(:password).and_return('sekrit')
+      allow(dbl).to receive(:ssl_verify_none).and_return(false)
       return dbl
     end
 

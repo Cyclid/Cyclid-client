@@ -78,6 +78,7 @@ describe Cyclid::Client::Api::Hmac do
       allow(dbl).to receive(:port).and_return(9999)
       allow(dbl).to receive(:username).and_return('test')
       allow(dbl).to receive(:secret).and_return('sekrit')
+      allow(dbl).to receive(:ssl_verify_none).and_return(false)
       return dbl
     end
 

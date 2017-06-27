@@ -80,6 +80,7 @@ module Cyclid
         def api_request(uri, req)
           http = Net::HTTP.new(uri.hostname, uri.port)
           http.use_ssl = uri.scheme == 'https'
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE if @config.ssl_verify_none
 
           res = http.request(req)
 
