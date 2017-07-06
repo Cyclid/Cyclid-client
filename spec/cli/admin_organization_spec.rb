@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Metrics/LineLength
 require 'cli_helper'
 
@@ -70,7 +71,7 @@ describe Cyclid::Cli::AdminOrganization do
         pubkey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw/tWDuC1yMQz0fzMN2zgo/GaF1u6XCYFtHAm2p+VPQT1a2JEcVbCpoO0rv3Ol6LuyqfdNvseriK/3Y7yM3y3aGmr5+Krx8BM7v2QXv0Cy92p7Bkgtg4rJAFv6vF3aHFtj8DqWfInms/nwshkqVi/n2EyBv2XQl/3h+szQ+8DD7rULmDZhBQXPPdRF2zqTOHiFKsEksIkrPHX7GPI2qV4OQ5kKOBEAcAYu+r58LJFKKBOsdI4FEBH3Q4fjGkPTa7Oggr4UvjkOaUbQwnhv/wtaW4sVH7ymZrygnZJlVCyoy5P9ax+CSMrZVW6XCfU8xeMoHsyeo5GAZUHqsgONb6C7QIDAQAB'
         org_info = { 'name' => 'test',
                      'owner_email' => 'test@example.com',
-                     'users' => %w(bob leslie),
+                     'users' => %w[bob leslie],
                      'public_key' => pubkey }
 
         stub_request(:get, 'http://localhost:9999/organizations/test')

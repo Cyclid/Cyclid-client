@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Copyright 2016 Liqwyd Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,36 +36,12 @@ module Cyclid
 
         The --json option causes the job file to be parsed as JSON.
       LONGDESC
-      option :yaml, aliases: '-y'
-      option :json, aliases: '-j'
+      option :yaml, type: :boolean, aliases: '-y', desc: 'Force the input file type to YAML'
+      option :json, type: :boolean, aliases: '-j', desc: 'Force the input file type to JSON'
       def submit(filename)
-        job_file = File.expand_path(filename)
-        raise 'Cannot open file' unless File.exist?(job_file)
+        job_data, job_type = load_job_file(filename)
 
-        job_type = if options[:yaml]
-                     'yaml'
-                   elsif options[:json]
-                     'json'
-                   else
-                     # Detect format
-                     match = job_file.match(/\A.*\.(json|yml|yaml)\z/)
-                     match[1]
-                   end
-        job_type = 'yaml' if job_type == 'yml'
-
-        # Do a client-side sanity check by attempting to parse the file; we
-        # don't do anything with the data but it fails-fast if the file has a
-        # syntax error
-        job = File.read(job_file)
-        if job_type == 'yaml'
-          YAML.load(job)
-        elsif job_type == 'json'
-          JSON.parse(job)
-        else
-          raise 'Unknown or unsupported file type'
-        end
-
-        job_info = client.job_submit(client.config.organization, job, job_type)
+        job_info = client.job_submit(client.config.organization, job_data, job_type)
         Formatter.colorize 'Job', job_info['job_id'].to_s
       rescue StandardError => ex
         abort "Failed to submit job: #{ex}"
@@ -142,33 +119,21 @@ module Cyclid
       end
 
       desc 'lint FILENAME', 'Check your job file for errors'
-      option :yaml, aliases: '-y'
-      option :json, aliases: '-j'
+      long_desc <<-LONGDESC
+        Lint a Cyclid job file for errors and potential problems. FILENAME should be the path to a
+        valid Cyclid job file, in either YAML or JSON format.
+
+        Cyclid will attempt to detect the format of the job file automatically. You can force the
+        parsing format using either the --yaml or --json options.
+
+        The --yaml option causes the job file to be parsed as YAML.
+
+        The --json option causes the job file to be parsed as JSON.
+      LONGDESC
+      option :yaml, type: :boolean, aliases: '-y', desc: 'Force the input file type to YAML'
+      option :json, type: :boolean, aliases: '-j', desc: 'Force the input file type to JSON'
       def lint(filename)
-        job_file = File.expand_path(filename)
-        raise 'Cannot open file' unless File.exist?(job_file)
-
-        job_type = if options[:yaml]
-                     'yaml'
-                   elsif options[:json]
-                     'json'
-                   else
-                     # Detect format
-                     match = job_file.match(/\A.*\.(json|yml|yaml)\z/)
-                     match[1]
-                   end
-        job_type = 'yaml' if job_type == 'yml'
-
-        # Attempt to load & parse the job file; any JSON or YAML syntax errors
-        # will be caught here
-        data = File.read(job_file)
-        job = if job_type == 'yaml'
-                YAML.load(data)
-              elsif job_type == 'json'
-                JSON.parse(data)
-              else
-                raise 'Unknown or unsupported file type'
-              end
+        job = parse_job_file(filename)
 
         # Now run the job through the Verifier to find problems
         verifier = RemoteVerifier.new(client: client)
@@ -192,6 +157,85 @@ module Cyclid
 
         # Finish with an exit code of 1 if there were problems
         exit 1 unless verifier.status.errors.zero? && verifier.status.warnings.zero?
+      end
+
+      desc 'format FILENAME', 'Re-format or convert your job file'
+      long_desc <<-LONGDESC
+        Pretty-format a Cyclid job file. FILENAME should be the path to a valid Cyclid job file,
+        in either YAML or JSON format. The output format can be YAML or JSON, regardless of the
+        input format.
+
+        Cyclid will attempt to detect the format of the job file automatically. You can force the
+        parsing format using either the --yaml or --json options.
+
+        The --yaml option causes the job file to be parsed as YAML.
+
+        The --json option causes the job file to be parsed as JSON.
+
+        The --yamlout option sets the output format the YAML.
+
+        The --jsonout option sets the output format the JSON.
+      LONGDESC
+
+      option :yaml, type: :boolean, aliases: '-y', desc: 'Force the input file type to YAML'
+      option :json, type: :boolean, aliases: '-j', desc: 'Force the input file type to JSON'
+      option :yamlout, type: :boolean, aliases: '-Y', desc: 'Set the output format to YAML'
+      option :jsonout, type: :boolean,
+                       aliases: '-J',
+                       desc: 'Set the input format to JSON',
+                       default: true
+      def format(filename)
+        job = parse_job_file(filename)
+
+        # Re-emit; Oj & YAML are nice and trustworthy in that they wont re-order objects. This
+        # means that we can nicely indent, or convert, without worrying that things like the
+        # Sequence is going to get re-ordered.
+        #
+        # The downside is that we can't force things like ordering of top-level elements,
+        # although users may consider that an advantage.
+        if options[:yamlout]
+          puts YAML.dump(job)
+        else
+          puts Oj.dump(job, indent: 2)
+        end
+      end
+
+      private
+
+      # Load a Cyclid job file, including format detection
+      def load_job_file(filename)
+        job_file = File.expand_path(filename)
+        raise 'Cannot open file' unless File.exist?(job_file)
+
+        job_type = if options[:yaml]
+                     'yaml'
+                   elsif options[:json]
+                     'json'
+                   else
+                     # Detect format
+                     match = job_file.match(/\A.*\.(json|yml|yaml)\z/)
+                     match[1]
+                   end
+        job_type = 'yaml' if job_type == 'yml'
+
+        # Attempt to load & parse the job file; any JSON or YAML syntax errors
+        # will be caught here
+        job_data = File.read(job_file)
+
+        [job_data, job_type]
+      end
+
+      # Load and parse a Cyclid job file
+      def parse_job_file(filename)
+        job_data, job_type = load_job_file(filename)
+
+        if job_type == 'yaml'
+          YAML.safe_load(job_data)
+        elsif job_type == 'json'
+          JSON.parse(job_data)
+        else
+          raise 'Unknown or unsupported file type'
+        end
       end
     end
   end

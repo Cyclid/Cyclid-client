@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'client_helper'
 
 describe Cyclid::Client::Auth do

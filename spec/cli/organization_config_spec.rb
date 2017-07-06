@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Metrics/LineLength
 require 'cli_helper'
 
@@ -24,7 +25,7 @@ describe Cyclid::Cli::Config do
                                        'description' => 'Setting #4' }],
                         'config' => { 'setting1' => 'thing',
                                       'setting2' => 'false',
-                                      'setting3' => %w(item1 item2),
+                                      'setting3' => %w[item1 item2],
                                       'setting4' => [{ 'key1' => 'value1' }, { 'key2' => 'value2' }] } }
 
         stub_request(:get, 'http://localhost:9999/organizations/admins/configs/test/example')
@@ -139,13 +140,13 @@ describe Cyclid::Cli::Config do
                                        'description' => 'Setting #4' }],
                         'config' => { 'setting1' => 'thing',
                                       'setting2' => 'false',
-                                      'setting3' => %w(item1 item2),
+                                      'setting3' => %w[item1 item2],
                                       'setting4' => [{ 'key1' => 'value1' }, { 'key2' => 'value2' }] } }
 
         # The modified hash that will be produced by this method from the above input
         expected_config = { 'setting1' => 'thing',
                             'setting2' => 'false',
-                            'setting3' => %w(item1 item2),
+                            'setting3' => %w[item1 item2],
                             'setting4' => [{ 'key1' => 'value1' }, { 'key2' => 'value2' }] }
 
         stub_request(:get, 'http://localhost:9999/organizations/admins/configs/test/example')

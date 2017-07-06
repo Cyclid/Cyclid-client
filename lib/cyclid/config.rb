@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Copyright 2016 Liqwyd Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,6 +78,7 @@ module Cyclid
         case @auth
         when AUTH_NONE
           # Nothing
+          nil
         when AUTH_HMAC
           @secret = options[:secret] || @config['secret']
         when AUTH_BASIC

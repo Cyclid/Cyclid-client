@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Metrics/LineLength
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
@@ -13,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = 'Cyclid command line client for interacting with a Cyclid server and the Ruby client library.'
   s.authors     = ['Kristian Van Der Vliet']
   s.email       = 'vanders@liqwyd.com'
-  s.files       = Dir.glob('lib/**/*') + %w(LICENSE README.md)
+  s.files       = Dir.glob('lib/**/*') + %w[LICENSE README.md]
   s.bindir      = 'bin'
   s.executables << 'cyclid'
 

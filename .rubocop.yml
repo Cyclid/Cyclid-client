@@ -7,7 +7,7 @@ LineLength:
   Max: 100
 Style/RedundantReturn:
   Enabled: false
-Style/SpaceBeforeBlockBraces:
+Layout/SpaceBeforeBlockBraces:
   Enabled: false
 Style/AndOr:
   Enabled: false

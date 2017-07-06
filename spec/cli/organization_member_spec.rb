@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'cli_helper'
 
 describe Cyclid::Cli::Member do
@@ -192,7 +193,7 @@ describe Cyclid::Cli::Member do
 
     describe '#list' do
       it 'lists the organization members' do
-        org_info = { 'users' => %w(bob leslie) }
+        org_info = { 'users' => %w[bob leslie] }
         stub_request(:get, 'http://localhost:9999/organizations/admins')
           .with(headers: { 'Accept' => '*/*',
                            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -280,7 +281,7 @@ describe Cyclid::Cli::Member do
 
     describe '#remove' do
       it 'removes a member from the organization when confirmation is given' do
-        org_info = { 'users' => %w(bob leslie) }
+        org_info = { 'users' => %w[bob leslie] }
         stub_request(:get, 'http://localhost:9999/organizations/admins')
           .with(headers: { 'Accept' => '*/*',
                            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -310,7 +311,7 @@ describe Cyclid::Cli::Member do
       end
 
       it 'does not remove a member from the organization when confirmation is not given' do
-        org_info = { 'users' => %w(bob leslie) }
+        org_info = { 'users' => %w[bob leslie] }
         stub_request(:get, 'http://localhost:9999/organizations/admins')
           .with(headers: { 'Accept' => '*/*',
                            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -340,7 +341,7 @@ describe Cyclid::Cli::Member do
       end
 
       it 'does not ask for confirmation when the --force option is given' do
-        org_info = { 'users' => %w(bob leslie) }
+        org_info = { 'users' => %w[bob leslie] }
         stub_request(:get, 'http://localhost:9999/organizations/admins')
           .with(headers: { 'Accept' => '*/*',
                            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',

@@ -1,106 +1,111 @@
 {
-   "name" : "Cyclid-client",
-   "environment" : {
-      "os" : "ubuntu_trusty",
-      "packages" : [
-         "ruby2.0",
-         "ruby2.0-dev",
-         "build-essential",
-         "git"
+  "name":"Cyclid-client",
+  "environment":{
+    "os":"ubuntu_trusty",
+    "repos":[
+      {
+        "url":"ppa:brightbox/ruby-ng"
+      }
+    ],
+    "packages":[
+      "ruby2.1",
+      "ruby2.1-dev",
+      "build-essential",
+      "git"
+    ]
+  },
+  "sources":[
+    {
+      "type":"git",
+      "url":"https://github.com/Cyclid/Cyclid-core"
+    },
+    {
+      "type":"git",
+      "url":"https://github.com/Cyclid/Cyclid-client"
+    }
+  ],
+  "stages":[
+    {
+      "name":"bundle-install",
+      "steps":[
+        {
+          "action":"command",
+          "cmd":"sudo gem install bundler --no-ri --no-doc"
+        },
+        {
+          "action":"command",
+          "cmd":"bundle install --path vendor/bundle",
+          "path":"%{workspace}/Cyclid-client"
+        }
       ]
-   },
-   "sources": [
-      {
-        "type": "git",
-        "url": "https://github.com/Cyclid/Cyclid-core"
-      },
-      {
-        "type": "git",
-        "url": "https://github.com/Cyclid/Cyclid-client"
-      }
-   ],
-   "stages" : [
-      {
-         "name" : "bundle-install",
-         "steps" : [
-            {
-               "action" : "command",
-               "cmd" : "sudo gem2.0 install bundler --no-ri --no-doc"
-            },
-            {
-               "action" : "command",
-               "cmd" : "bundle install --path vendor/bundle",
-               "path" : "%{workspace}/Cyclid-client"
-            }
-         ]
-      },
-      {
-         "name" : "lint",
-         "steps" : [
-            {
-               "action" : "command",
-               "cmd" : "bundle exec rake rubocop",
-               "path" : "%{workspace}/Cyclid-client"
-            }
-         ]
-      },
-      {
-        "name" : "test",
-        "steps" : [
-          {
-            "action" : "command",
-            "cmd" : "bundle exec rake spec",
-            "path" : "%{workspace}/Cyclid-client"
-          }
-        ]
-      },
-      {
-         "name" : "build",
-         "steps" : [
-            {
-               "action" : "command",
-               "cmd" : "bundle exec rake build",
-               "path" : "%{workspace}/Cyclid-client"
-            }
-         ]
-      },
-      {
-        "name": "success",
-        "steps": [
-          {
-            "action" : "slack",
-            "subject" : "%{job_name} succeeded",
-            "message" : "Build %{organization}/%{job_name} (job #%{job_id}) completed successfully."
-          }
-        ]
-      },
-      {
-        "name": "failure",
-        "steps": [
-          {
-            "action" : "slack",
-            "subject" : "%{job_name} failed",
-            "message" : "Build %{organization}/%{job_name} (job #%{job_id}) failed.",
-            "color" : "danger"
-          }
-        ]
-      }
-   ],
-   "sequence" : [
-      {
-         "stage" : "bundle-install",
-         "on_success" : "lint",
-         "on_failure" : "failure"
-      },
-      {
-         "stage" : "lint",
-         "on_success" : "test",
-         "on_failure" : "failure"
-      },
-      {
-         "stage" : "build",
-         "on_success" : "success",
-         "on_failure" : "failure"
-      }
-   ]
+    },
+    {
+      "name":"lint",
+      "steps":[
+        {
+          "action":"command",
+          "cmd":"bundle exec rake rubocop",
+          "path":"%{workspace}/Cyclid-client"
+        }
+      ]
+    },
+    {
+      "name":"test",
+      "steps":[
+        {
+          "action":"command",
+          "cmd":"bundle exec rake spec",
+          "path":"%{workspace}/Cyclid-client"
+        }
+      ]
+    },
+    {
+      "name":"build",
+      "steps":[
+        {
+          "action":"command",
+          "cmd":"bundle exec rake build",
+          "path":"%{workspace}/Cyclid-client"
+        }
+      ]
+    },
+    {
+      "name":"success",
+      "steps":[
+        {
+          "action":"slack",
+          "subject":"%{job_name} succeeded",
+          "message":"Build %{organization}/%{job_name} (job #%{job_id}) completed successfully."
+        }
+      ]
+    },
+    {
+      "name":"failure",
+      "steps":[
+        {
+          "action":"slack",
+          "subject":"%{job_name} failed",
+          "message":"Build %{organization}/%{job_name} (job #%{job_id}) failed.",
+          "color":"danger"
+        }
+      ]
+    }
+  ],
+  "sequence":[
+    {
+      "stage":"bundle-install",
+      "on_success":"lint",
+      "on_failure":"failure"
+    },
+    {
+      "stage":"lint",
+      "on_success":"test",
+      "on_failure":"failure"
+    },
+    {
+      "stage":"build",
+      "on_success":"success",
+      "on_failure":"failure"
+    }
+  ]
 }
