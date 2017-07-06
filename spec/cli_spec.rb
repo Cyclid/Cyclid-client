@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'cli_helper'
 
 describe Thor do

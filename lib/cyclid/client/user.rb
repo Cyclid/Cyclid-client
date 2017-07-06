@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Copyright 2016 Liqwyd Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,13 +67,15 @@ module Cyclid
         user['secret'] = secret unless secret.nil?
 
         # Add the password if one was supplied
-        user['password'] = if password =~ /\A\$2a\$.+\z/
-                             # Password is already encrypted
-                             password
-                           else
-                             # Encrypt the plaintext password
-                             BCrypt::Password.create(password).to_s
-                           end unless password.nil?
+        unless password.nil?
+          user['password'] = if password =~ /\A\$2a\$.+\z/
+                               # Password is already encrypted
+                               password
+                             else
+                               # Encrypt the plaintext password
+                               BCrypt::Password.create(password).to_s
+                             end
+        end
 
         @logger.debug user
 
@@ -114,13 +117,15 @@ module Cyclid
         user['secret'] = args[:secret] if args.key? :secret and args[:secret]
 
         # Add the password if one was supplied
-        user['password'] = if args[:password] =~ /\A\$2a\$.+\z/
-                             # Password is already encrypted
-                             args[:password]
-                           else
-                             # Encrypt the plaintext password
-                             BCrypt::Password.create(args[:password]).to_s
-                           end if args.key? :password and args[:password]
+        if args.key? :password and args[:password]
+          user['password'] = if args[:password] =~ /\A\$2a\$.+\z/
+                               # Password is already encrypted
+                               args[:password]
+                             else
+                               # Encrypt the plaintext password
+                               BCrypt::Password.create(args[:password]).to_s
+                             end
+        end
 
         @logger.debug user
 

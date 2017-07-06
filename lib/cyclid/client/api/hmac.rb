@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Copyright 2016 Liqwyd Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,7 +43,7 @@ module Cyclid
           nonce = SecureRandom.hex
           headers = signer.sign_request(uri.path,
                                         @config.secret,
-                                        auth_header_format: '%{auth_scheme} %{username}:%{signature}', # rubocop:disable Metrics/LineLength
+                                        auth_header_format: '%<auth_scheme>s %<username>s:%<signature>s', # rubocop:disable Metrics/LineLength
                                         username: @config.username,
                                         nonce: nonce,
                                         method: method)

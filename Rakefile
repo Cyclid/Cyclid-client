@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 # rubocop:disable Metrics/LineLength
 
 begin
@@ -9,7 +10,7 @@ end
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec)
 
-ENV['TEST_CONFIG'] = File.join(%w(config test))
+ENV['TEST_CONFIG'] = File.join(%w[config test])
 
 require 'rubygems/tasks'
 Gem::Tasks.new

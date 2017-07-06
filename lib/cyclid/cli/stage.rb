@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Copyright 2016 Liqwyd Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,8 +64,8 @@ module Cyclid
 
         The --json option causes the file to be parsed as JSON.
       LONGDESC
-      option :yaml, aliases: '-y'
-      option :json, aliases: '-j'
+      option :yaml, type: :boolean, aliases: '-y', desc: 'Force the input file type to YAML'
+      option :json, type: :boolean, aliases: '-j', desc: 'Force the input file type to JSON'
       option :version, aliases: '-v'
       def create(filename)
         stage_file = File.expand_path(filename)
@@ -85,7 +86,7 @@ module Cyclid
         # will fail-fast if the file has a syntax error
         stage = File.read(stage_file)
         stage_data = if stage_type == 'yaml'
-                       YAML.load(stage)
+                       YAML.safe_load(stage)
                      elsif stage_type == 'json'
                        JSON.parse(stage)
                      else
